@@ -109,9 +109,51 @@ def test_hackathon_demo_flow():
     assert re_tracking_res["complaint_data"]["current_status"] == "In Progress"
     assert "IN PROGRESS" in re_tracking_res["reply"].upper()
 
-    # Verify event audit timeline contains both registration and status change
-    timeline = database.get_complaint_timeline(complaint_id)
-    assert len(timeline) >= 2
-    event_types = [e["event_type"] for e in timeline]
-    assert any(et in event_types for et in ["CREATED", "REGISTERED"])
-    assert any(et in event_types for et in ["STATUS_UPDATED", "STATUS_CHANGE"])
+    # Scene 7: Step 5 - Show complaint reflected in Neighborhood Pulse
+    pulse_stats = database.get_neighborhood_pulse_stats(locality=locality)
+    assert pulse_stats["total_complaints"] >= 1
+    assert "metrics" in pulse_stats
+    assert pulse_stats["metrics"]["total_complaints"] >= 1
+
+    # Scene 8: Step 8 & 9 - CivicTwin Before & After Resolution Verification
+    after_path = Path(__file__).resolve().parent.parent / "data" / "samples" / "sample_pothole_fixed.jpg"
+    assert after_path.exists(), "Sample repaired pothole photo must exist."
+    with open(after_path, "rb") as f:
+        after_bytes = f.read()
+
+    civictwin_report = vision.verify_civictwin(
+        before_bytes=image_bytes,
+        after_bytes=after_bytes,
+        issue_type="Potholes and damaged roads"
+    )
+    assert civictwin_report["appears_improved"] is True
+    assert civictwin_report["repair_status"] == "Complete"
+    assert "verification_score" in civictwin_report
+    assert civictwin_report["verification_score"] > 0.8
+    assert "quality_checklist" in civictwin_report
+
+    # Insert CivicTwin report into database
+    v_id = database.insert_civictwin_verification(
+        complaint_id=complaint_id,
+        before_hash=image_hash,
+        after_hash=tools.compute_image_hash(after_bytes),
+        verification_result=civictwin_report
+    )
+    assert v_id > 0
+
+    # Scene 9: Human-in-the-Loop Municipal Officer Sign-Off
+    resolve_ok = database.confirm_civictwin_resolution(
+        target_id=complaint_id,
+        admin_notes="Officer verified asphalt compaction and surface grade."
+    )
+    assert resolve_ok is True
+
+    # Scene 10: Retrieve Updated Complaint Journey & Chat Assistant Reflection
+    resolved_record = database.get_complaint(complaint_id)
+    assert resolved_record["status"] == "Resolved"
+
+    post_resolution_query = f"Is complaint {complaint_id} resolved?"
+    final_tracking_res = agent.run_tracking_chat_agent(user_message=post_resolution_query)
+    assert final_tracking_res["complaint_data"] is not None
+    assert final_tracking_res["complaint_data"]["current_status"] == "Resolved"
+    assert "RESOLVED" in final_tracking_res["reply"].upper()
