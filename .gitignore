@@ -24,6 +24,7 @@ data/*.sqlite*
 
 # System & IDE artifacts
 .DS_Store
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 *.log
 .system_generated/
