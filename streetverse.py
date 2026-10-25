@@ -635,7 +635,7 @@ div.stButton > button[kind="primary"]:hover {
 """
 
 
-def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]) -> str:
+def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str], lang: str = "en") -> str:
     """
     Renders the handcrafted 2.5D Isometric Miniature Indian Neighborhood SVG Scene.
     Embeds state-aware civic hotspots with live database complaint counts.
@@ -646,6 +646,24 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
     drainage_count = counts.get("Waterlogging and drainage issues", 0)
 
     road_state = active_states.get("road", "alert" if pothole_count > 0 else "smooth")
+
+    title_road = t("hotspot_road_title", lang)
+    title_light = t("hotspot_light_title", lang)
+    title_waste = t("hotspot_waste_title", lang)
+    title_drain = t("hotspot_drain_title", lang)
+    work_label = "Work" if lang == "en" else t("In Progress", lang)
+    verified_label = "Verified" if lang == "en" else t("Resolved", lang)
+
+    if lang == "en":
+        sub_road = f"Active Signal{'s' if pothole_count != 1 else ''}"
+        sub_light = f"Incident{'s' if streetlight_count != 1 else ''}"
+        sub_waste = f"Active Point{'s' if garbage_count != 1 else ''}"
+        sub_drain = f"Logged Runoff{'s' if drainage_count != 1 else ''}"
+    else:
+        sub_road = t("active_reports_sub", lang)
+        sub_light = t("lighting_incidents_sub", lang)
+        sub_waste = t("waste_points_sub", lang)
+        sub_drain = t("drainage_issues_sub", lang)
 
     # SVG markup with handcrafted vector shapes
     svg_code = f"""
@@ -795,15 +813,15 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
             <path d="M 200 528 Q 230 520 260 532 Q 235 542 200 528 Z" fill="#243B63" opacity="0.6"/>
 
             <!-- State-Aware Indicator -->
-            {'<circle cx="230" cy="530" r="18" fill="none" stroke="#D96C48" stroke-width="3" class="animated-ripple"/><circle cx="230" cy="530" r="10" fill="#D96C48"/><text x="230" y="534" font-size="11" font-weight="800" fill="#FFFFFF" text-anchor="middle">!</text>' if road_state == 'alert' else ('<rect x="210" y="515" width="12" height="24" fill="#F4BB52" stroke="#243B63" stroke-width="1.5"/><rect x="235" y="515" width="12" height="24" fill="#F4BB52" stroke="#243B63" stroke-width="1.5"/><text x="230" y="510" font-size="10" font-weight="700" fill="#F4BB52" text-anchor="middle">🚧 Work</text>' if road_state == 'in_progress' else '<ellipse cx="230" cy="530" rx="35" ry="18" fill="#4A5568" stroke="#83A98A" stroke-width="2"/><text x="230" y="534" font-size="12" fill="#83A98A" text-anchor="middle">✓ Verified</text>')}
+            {'<circle cx="230" cy="530" r="18" fill="none" stroke="#D96C48" stroke-width="3" class="animated-ripple"/><circle cx="230" cy="530" r="10" fill="#D96C48"/><text x="230" y="534" font-size="11" font-weight="800" fill="#FFFFFF" text-anchor="middle">!</text>' if road_state == 'alert' else (f'<rect x="210" y="515" width="12" height="24" fill="#F4BB52" stroke="#243B63" stroke-width="1.5"/><rect x="235" y="515" width="12" height="24" fill="#F4BB52" stroke="#243B63" stroke-width="1.5"/><text x="230" y="510" font-size="10" font-weight="700" fill="#F4BB52" text-anchor="middle">🚧 {work_label}</text>' if road_state == 'in_progress' else f'<ellipse cx="230" cy="530" rx="35" ry="18" fill="#4A5568" stroke="#83A98A" stroke-width="2"/><text x="230" y="534" font-size="12" fill="#83A98A" text-anchor="middle">✓ {verified_label}</text>')}
 
             <!-- Floating Badge Card -->
             <g transform="translate(140, 470)" filter="url(#cardShadow)">
                 <rect width="180" height="42" rx="12" fill="#FFFFFF" stroke="#D96C48" stroke-width="2"/>
                 <circle cx="22" cy="21" r="12" fill="#FDE8E8"/>
                 <text x="22" y="26" font-size="13" text-anchor="middle">🕳️</text>
-                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">Damaged Road & Potholes</text>
-                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#D96C48">{pothole_count} Active Signal{'s' if pothole_count != 1 else ''}</text>
+                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">{title_road}</text>
+                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#D96C48">{pothole_count} {sub_road}</text>
             </g>
         </g>
 
@@ -825,8 +843,8 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
                 <rect width="175" height="42" rx="12" fill="#FFFFFF" stroke="#F4BB52" stroke-width="2"/>
                 <circle cx="22" cy="21" r="12" fill="#FEF3C7"/>
                 <text x="22" y="26" font-size="13" text-anchor="middle">💡</text>
-                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">Streetlights & Lighting</text>
-                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#B45309">{streetlight_count} Incident{'s' if streetlight_count != 1 else ''}</text>
+                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">{title_light}</text>
+                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#B45309">{streetlight_count} {sub_light}</text>
             </g>
         </g>
 
@@ -846,8 +864,8 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
                 <rect width="170" height="42" rx="12" fill="#FFFFFF" stroke="#83A98A" stroke-width="2"/>
                 <circle cx="22" cy="21" r="12" fill="#ECFDF5"/>
                 <text x="22" y="26" font-size="13" text-anchor="middle">🗑️</text>
-                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">Waste Point & Sanitation</text>
-                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#047857">{garbage_count} Active Point{'s' if garbage_count != 1 else ''}</text>
+                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">{title_waste}</text>
+                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#047857">{garbage_count} {sub_waste}</text>
             </g>
         </g>
 
@@ -866,8 +884,8 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
                 <rect width="180" height="42" rx="12" fill="#FFFFFF" stroke="#243B63" stroke-width="2"/>
                 <circle cx="22" cy="21" r="12" fill="#EFF6FF"/>
                 <text x="22" y="26" font-size="13" text-anchor="middle">🌊</text>
-                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">Stormwater Drainage</text>
-                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#1D4ED8">{drainage_count} Logged Runoff{'s' if drainage_count != 1 else ''}</text>
+                <text x="42" y="19" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#243B63">{title_drain}</text>
+                <text x="42" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#1D4ED8">{drainage_count} {sub_drain}</text>
             </g>
         </g>
 
@@ -945,7 +963,7 @@ def render_floating_header(lang: str = "en"):
                 st.rerun()
 
         with top_ctrl2:
-            if st.button("🤖 Ask AI", use_container_width=True, key="btn_top_ask_ai"):
+            if st.button(t("btn_ask_ai", lang), use_container_width=True, key="btn_top_ask_ai"):
                 st.session_state.street_active_view = "companion"
                 st.session_state.selected_case_id = None
                 st.rerun()
@@ -1010,17 +1028,21 @@ def render_floating_capsule(active_view: str, lang: str = "en"):
             st.rerun()
 
 
-def render_activity_pill(stats: Dict[str, Any]):
+def render_activity_pill(stats: Dict[str, Any], lang: str = "en"):
     """Renders the real-data telemetry badge in the bottom corner."""
     metrics = stats.get("metrics", {})
     total = metrics.get("total_complaints", 0)
     in_prog = metrics.get("in_progress_complaints", 0)
     resolved = metrics.get("resolved_complaints", 0)
+    lbl_telem = t("live_telemetry", lang)
+    lbl_rep = t("Reported", lang)
+    lbl_prog = t("In Progress", lang)
+    lbl_res = t("Resolved", lang)
 
     st.markdown(f"""
         <div class="civic-activity-badge">
             <span class="pulse-dot"></span>
-            <span><strong>Live City Telemetry:</strong> {total} Reported • {in_prog} In Progress • {resolved} Resolved</span>
+            <span><strong>{lbl_telem}:</strong> {total} {lbl_rep} • {in_prog} {lbl_prog} • {resolved} {lbl_res}</span>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1032,13 +1054,15 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
     metadata annotations, AI rationale, and audit event logs.
     """
     cid = complaint.get("id", "NS-UNKNOWN")
-    issue = complaint.get("issue_type", "Civic Grievance")
-    locality = complaint.get("locality", "Local Jurisdiction")
-    city = complaint.get("city", "Municipal Area")
+    issue = t(complaint.get("issue_type", "Civic Grievance"), lang)
+    locality = t(complaint.get("locality", "Local Jurisdiction"), lang)
+    city = t(complaint.get("city", "Municipal Area"), lang)
     ward = complaint.get("ward", "Local Ward")
-    dept = complaint.get("department", "Municipal Department")
+    dept = t(complaint.get("department", "Municipal Department"), lang)
     status = complaint.get("status", "Reported")
+    status_label = t(status, lang)
     priority = complaint.get("priority", "Medium")
+    priority_label = t(priority, lang)
     desc = complaint.get("description", "No description recorded.")
     evidence = complaint.get("visual_evidence", "Photographic topography examined.")
     created = complaint.get("created_at", "")
@@ -1054,42 +1078,50 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
     else:
         badge_cls = "dossier-pill-medium"
 
+    dossier_tag = t("case_dossier_tag", lang)
+    ward_lbl = t("ward_label", lang)
+    status_lbl = t("status_label", lang)
+    evi_lbl = t("ai_topography_evidence", lang)
+    stmt_lbl = t("citizen_statement", lang)
+    auth_lbl = t("assigned_authority", lang)
+    time_lbl = t("filing_timestamp", lang)
+
     st.markdown(f"""
         <div class="case-file-dossier">
             <div class="case-file-header">
                 <div>
                     <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                        CIVIC CASE DOSSIER • {cid}
+                        {dossier_tag} • {cid}
                     </span>
                     <h2 class="dossier-headline">{issue}</h2>
                     <div style="font-size: 0.95rem; color: #64748B; margin-top: 4px;">
-                        📍 <strong>{locality}, {city}</strong> • Ward: <code>{ward}</code>
+                        📍 <strong>{locality}, {city}</strong> • {ward_lbl}: <code>{ward}</code>
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                    <span class="dossier-meta-pill {badge_cls}">⚖️ {priority} Priority</span>
-                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">STATUS: {status.upper()}</span>
+                    <span class="dossier-meta-pill {badge_cls}">⚖️ {priority_label}</span>
+                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">{status_lbl.upper()}: {status_label.upper()}</span>
                 </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 18px;">
                     <strong style="color: #243B63; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                        AI Visual Topography Evidence
+                        {evi_lbl}
                     </strong>
                     <p style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">
                         {evidence}
                     </p>
                     <div style="font-size: 0.85rem; color: #7C6044; margin-top: 10px;">
-                        <strong>Citizen Statement:</strong> <em>"{desc}"</em>
+                        <strong>{stmt_lbl}</strong> <em>"{desc}"</em>
                     </div>
                 </div>
 
                 <div style="background: #FFFFFF; border: 1.5px solid #E8DAC6; border-radius: 14px; padding: 18px;">
-                    <div style="font-size: 0.78rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Assigned Authority</div>
+                    <div style="font-size: 0.78rem; font-weight: 700; color: #64748B; text-transform: uppercase;">{auth_lbl}</div>
                     <div style="font-weight: 700; font-size: 0.96rem; color: #243B63; margin-top: 2px;">{dept}</div>
                     
-                    <div style="font-size: 0.78rem; font-weight: 700; color: #64748B; text-transform: uppercase; margin-top: 14px;">Filing Timestamp</div>
+                    <div style="font-size: 0.78rem; font-weight: 700; color: #64748B; text-transform: uppercase; margin-top: 14px;">{time_lbl}</div>
                     <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #243B63; margin-top: 2px;">{created}</div>
                 </div>
             </div>
@@ -1099,7 +1131,7 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
     # Chronological Audit Trail
     events = database.get_complaint_timeline(cid)
     if events:
-        st.markdown("#### 📜 Official Municipal Event Trail")
+        st.markdown(f"#### {t('official_event_trail', lang)}")
         for ev in events:
             st.markdown(f"""
                 <div style="display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed #DFCAB0;">
@@ -1107,7 +1139,7 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
                         {ev.get('created_at', '')}
                     </span>
                     <div>
-                        <strong style="color: #243B63; font-size: 0.88rem;">{ev.get('event_type', '')}</strong>
+                        <strong style="color: #243B63; font-size: 0.88rem;">{t(ev.get('event_type', ''), lang)}</strong>
                         <div style="font-size: 0.84rem; color: #64748B; margin-top: 2px;">{ev.get('details', '')}</div>
                     </div>
                 </div>
@@ -1115,12 +1147,12 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
 
     btn_c1, btn_c2 = st.columns([0.4, 0.6])
     with btn_c1:
-        if st.button("🔍 Follow in Repair Story", type="primary", use_container_width=True, key=f"btn_track_{cid}"):
+        if st.button(t("btn_follow_repair_story", lang), type="primary", use_container_width=True, key=f"btn_track_{cid}"):
             st.session_state.street_active_view = "track"
             st.session_state.tracking_search_id = cid
             st.rerun()
     with btn_c2:
-        if st.button("↩️ Return to Street", use_container_width=True, key=f"btn_close_{cid}"):
+        if st.button(t("btn_return_street", lang), use_container_width=True, key=f"btn_close_{cid}"):
             st.session_state.selected_case_id = None
             st.session_state.selected_hotspot = None
             st.rerun()
@@ -1133,18 +1165,24 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
     """
     meta = HOTSPOT_METADATA.get(target_key, HOTSPOT_METADATA["road"])
     category = meta["category"]
+    c_title = t(meta["title"], lang)
+    c_hint = t(meta["hint"], lang)
+    c_dept = t(meta["department"], lang)
+    tag_insp = t("hotspot_inspect_tag", lang)
+    lbl_nodal = t("responsible_nodal_body", lang)
+    btn_report_lbl = t("report_at_location", lang)
 
     st.markdown(f"""
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <div>
                 <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: {meta['color']};">
-                    CIVIC INFRASTRUCTURE INSPECTION
+                    {tag_insp}
                 </span>
                 <h2 style="font-family: 'Fraunces', serif; font-size: 1.8rem; color: #243B63; margin: 0;">
-                    {meta['icon']} {meta['title']}
+                    {meta['icon']} {c_title}
                 </h2>
                 <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                    {meta['hint']} • Responsible Nodal Body: <strong>{meta['department']}</strong>
+                    {c_hint} • {lbl_nodal}: <strong>{c_dept}</strong>
                 </p>
             </div>
         </div>
@@ -1152,7 +1190,7 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
 
     h_col1, h_col2 = st.columns([0.7, 0.3])
     with h_col2:
-        if st.button(f"📸 Report {meta['icon']} at this Location", type="primary", use_container_width=True, key=f"btn_rep_{target_key}"):
+        if st.button(f"{btn_report_lbl} {meta['icon']}", type="primary", use_container_width=True, key=f"btn_rep_{target_key}"):
             st.session_state.street_active_view = "report"
             st.session_state.selected_sample = meta["sample"]
             st.session_state.sample_hint = category
@@ -1164,23 +1202,23 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
     complaints = database.list_complaints(issue_type=category, limit=20)
     
     if not complaints:
-        st.info(f"✨ No active complaints found for {category}. The illustrated infrastructure is in verified clean state!")
+        st.info(f"{t('no_active_complaints', lang)}")
     else:
-        st.markdown(f"### 📋 Active Cases in Streetview ({len(complaints)} records)")
+        st.markdown(f"### 📋 {t('active_cases_heading', lang)} ({len(complaints)})")
         for comp in complaints:
             c_col1, c_col2 = st.columns([0.82, 0.18])
             with c_col1:
                 st.markdown(f"""
                     <div style="background: #FFFFFF; border: 1.5px solid #E8DAC6; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px;">
                         <div style="display: flex; justify-content: space-between;">
-                            <strong style="color: #243B63; font-size: 0.95rem;">{comp['id']} • {comp['locality']}, {comp['city']}</strong>
-                            <span style="font-size: 0.76rem; font-weight: 700; color: #D96C48; text-transform: uppercase;">{comp['status']}</span>
+                            <strong style="color: #243B63; font-size: 0.95rem;">{comp['id']} • {t(comp['locality'], lang)}, {t(comp['city'], lang)}</strong>
+                            <span style="font-size: 0.76rem; font-weight: 700; color: #D96C48; text-transform: uppercase;">{t(comp['status'], lang)}</span>
                         </div>
                         <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">{comp['description']}</div>
                     </div>
                 """, unsafe_allow_html=True)
             with c_col2:
-                if st.button("Inspect Dossier", key=f"btn_view_{comp['id']}", use_container_width=True):
+                if st.button(t("btn_inspect_dossier", lang), key=f"btn_view_{comp['id']}", use_container_width=True):
                     st.session_state.selected_case_id = comp["id"]
                     st.rerun()
 
@@ -1193,27 +1231,35 @@ def render_ai_investigation_workspace(lang: str = "en"):
     Stage 3: Agent Action (Live execution of 10-stage pipeline with affirmative citizen confirmation)
     Stage 4: Case Created (Case File with real demo tracking ID)
     """
-    st.markdown("""
+    tag_inv = t("inv_tag", lang)
+    head_inv = t("inv_headline", lang)
+    desc_inv = t("inv_desc", lang)
+    p1 = t("stage_1_pill", lang)
+    p2 = t("stage_2_pill", lang)
+    p3 = t("stage_3_pill", lang)
+    p4 = t("stage_4_pill", lang)
+
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                AI INVESTIGATION MODE
+                {tag_inv}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                📸 Autonomous Civic Evidence Investigation
+                {head_inv}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Upload photographic proof to trigger multimodal diagnostic analysis, priority heuristics, and automated ward dispatch.
+                {desc_inv}
             </p>
         </div>
     """, unsafe_allow_html=True)
 
     # Stage Indicators
-    st.markdown("""
+    st.markdown(f"""
         <div style="display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;">
-            <div class="investigation-step-pill active">STAGE 1: Evidence</div>
-            <div class="investigation-step-pill">STAGE 2: AI Diagnostic</div>
-            <div class="investigation-step-pill">STAGE 3: Autonomous Routing</div>
-            <div class="investigation-step-pill">STAGE 4: Case File</div>
+            <div class="investigation-step-pill active">{p1}</div>
+            <div class="investigation-step-pill">{p2}</div>
+            <div class="investigation-step-pill">{p3}</div>
+            <div class="investigation-step-pill">{p4}</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1222,38 +1268,38 @@ def render_ai_investigation_workspace(lang: str = "en"):
     image_bytes = None
 
     with col_input:
-        st.markdown("#### 1. Upload or Select Sample Incident")
+        st.markdown(f"#### {t('upload_heading', lang)}")
         uploaded_file = st.file_uploader(
-            "Upload photographic proof",
+            t("upload_label", lang),
             type=["jpg", "jpeg", "png"],
             help="High-resolution photo showing clear infrastructure defect",
             label_visibility="collapsed"
         )
 
-        st.caption("Or test with verified scenario cases:")
+        st.caption(t("test_cases_label", lang))
         s_c1, s_c2, s_c3, s_c4 = st.columns(4)
-        if s_c1.button("🕳️ Pothole", use_container_width=True, key="inv_s_pothole"):
+        if s_c1.button(t("scenario_pothole", lang), use_container_width=True, key="inv_s_pothole"):
             st.session_state.selected_sample = "sample_pothole.jpg"
             st.session_state.sample_hint = "Potholes and damaged roads"
             st.session_state.sample_city = "Bengaluru"
             st.session_state.sample_locality = "Indiranagar"
             st.rerun()
 
-        if s_c2.button("🗑️ Garbage", use_container_width=True, key="inv_s_garbage"):
+        if s_c2.button(t("scenario_garbage", lang), use_container_width=True, key="inv_s_garbage"):
             st.session_state.selected_sample = "sample_garbage.jpg"
             st.session_state.sample_hint = "Overflowing garbage"
             st.session_state.sample_city = "Mumbai"
             st.session_state.sample_locality = "Bandra West"
             st.rerun()
 
-        if s_c3.button("💡 Light", use_container_width=True, key="inv_s_light"):
+        if s_c3.button(t("scenario_light", lang), use_container_width=True, key="inv_s_light"):
             st.session_state.selected_sample = "sample_streetlight.jpg"
             st.session_state.sample_hint = "Broken streetlights"
             st.session_state.sample_city = "Delhi"
             st.session_state.sample_locality = "Connaught Place"
             st.rerun()
 
-        if s_c4.button("🌊 Drain", use_container_width=True, key="inv_s_drain"):
+        if s_c4.button(t("scenario_drain", lang), use_container_width=True, key="inv_s_drain"):
             st.session_state.selected_sample = "sample_waterlogging.jpg"
             st.session_state.sample_hint = "Waterlogging and drainage issues"
             st.session_state.sample_city = "Ahmedabad"
@@ -1261,7 +1307,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
             st.rerun()
 
         # City and Locality Selectors
-        st.markdown("#### 2. Locality Jurisdiction")
+        st.markdown(f"#### {t('locality_heading', lang)}")
         ward_data = tools.load_ward_data()
         city_locality_map: Dict[str, List[str]] = {}
         for row in ward_data:
@@ -1284,14 +1330,14 @@ def render_ai_investigation_workspace(lang: str = "en"):
         cities = sorted(list(city_locality_map.keys()))
         default_city = st.session_state.get("sample_city", "Bengaluru")
         c_idx = cities.index(default_city) if default_city in cities else 0
-        selected_city = st.selectbox("Municipal City", options=cities, index=c_idx, key="inv_sel_city")
+        selected_city = st.selectbox(t("city_select_label", lang), options=cities, index=c_idx, key="inv_sel_city")
 
         localities = city_locality_map.get(selected_city, ["Indiranagar"])
         default_loc = st.session_state.get("sample_locality", localities[0] if localities else "")
         l_idx = localities.index(default_loc) if default_loc in localities else 0
-        selected_locality = st.selectbox("Ward / Neighborhood Locality", options=localities, index=l_idx, key="inv_sel_loc")
+        selected_locality = st.selectbox(t("ward_select_label", lang), options=localities, index=l_idx, key="inv_sel_loc")
 
-        landmark_input = st.text_input("Landmark / Spot Hint (Optional)", value="Near City Center Junction", key="inv_txt_landmark")
+        landmark_input = st.text_input(t("landmark_label", lang), value="Near City Center Junction", key="inv_txt_landmark")
 
     with col_preview:
         if uploaded_file:
@@ -1304,16 +1350,16 @@ def render_ai_investigation_workspace(lang: str = "en"):
                     image_bytes = f.read()
                 st.image(image_bytes, caption=f"Demo Incident: {st.session_state.selected_sample}", use_column_width=True)
         else:
-            st.markdown("""
+            st.markdown(f"""
                 <div style="border: 2px dashed #DFCAB0; border-radius: 16px; padding: 60px 20px; text-align: center; color: #7C6044;">
-                    📷 Photo preview will appear here.<br>Select a scenario above or upload your photograph.
+                    {t('photo_placeholder', lang)}
                 </div>
             """, unsafe_allow_html=True)
 
     # Action Button
     if image_bytes:
         st.markdown("---")
-        if st.button("🚀 Run AI Multimodal Diagnosis & Investigation", type="primary", use_container_width=True, key="btn_run_investigation"):
+        if st.button(t("btn_run_investigation", lang), type="primary", use_container_width=True, key="btn_run_investigation"):
             with st.spinner("🤖 Multimodal Vision Engine analyzing surface topography, severity & risk..."):
                 hint_cat = st.session_state.get("sample_hint", "Potholes and damaged roads")
                 analysis_report = vision.analyze_issue(image_bytes, hint_category=hint_cat)
@@ -1339,32 +1385,43 @@ def render_ai_investigation_workspace(lang: str = "en"):
         p_state = st.session_state.current_pipeline_state
 
         st.markdown("---")
+        s2_tag = t("stage_2_tag", lang)
+        diag_lbl = t("diagnosis_label", lang)
+        sev_lbl = t("severity_label", lang)
+        sla_lbl = t("sla_label", lang)
+        vis_lbl = t("visual_evidence_label", lang)
+        imp_lbl = t("citizen_impact_title", lang)
+        act_lbl = t("action_target_label", lang)
+        diag_val = t(rep['issue_type'], lang)
+        sev_val = t(rep['severity'], lang)
+        dept_val = t(rep['recommended_department'], lang)
+
         st.markdown(f"""
             <div style="background: #FFFFFF; border: 2px solid #D96C48; border-radius: 18px; padding: 22px; box-shadow: 0 12px 30px rgba(217, 108, 72, 0.12); margin-top: 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 12px; margin-bottom: 14px;">
                     <div>
-                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">STAGE 2: AI UNDERSTANDING</span>
-                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">Diagnosis: {rep['issue_type']}</h3>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">{s2_tag}</span>
+                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">{diag_lbl}: {diag_val}</h3>
                     </div>
                     <div>
-                        <span class="dossier-meta-pill dossier-pill-high">🚨 {rep['severity']} Severity</span>
-                        <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">SLA: {rep['sla_hours']}h</span>
+                        <span class="dossier-meta-pill dossier-pill-high">🚨 {sev_val} {sev_lbl}</span>
+                        <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">{sla_lbl}: {rep['sla_hours']}h</span>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
                     <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 10px; padding: 12px;">
-                        <strong style="font-size: 0.8rem; color: #7C6044; text-transform: uppercase;">Visual Evidence:</strong>
+                        <strong style="font-size: 0.8rem; color: #7C6044; text-transform: uppercase;">{vis_lbl}</strong>
                         <div style="font-size: 0.9rem; color: #243B63; margin-top: 4px;">{rep['visual_evidence']}</div>
                     </div>
                     <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 10px; padding: 12px;">
-                        <strong style="font-size: 0.8rem; color: #7C6044; text-transform: uppercase;">Citizen Impact:</strong>
+                        <strong style="font-size: 0.8rem; color: #7C6044; text-transform: uppercase;">{imp_lbl}</strong>
                         <div style="font-size: 0.9rem; color: #243B63; margin-top: 4px;">{rep['citizen_impact']}</div>
                     </div>
                     <div style="grid-column: span 2; background: #ECFDF5; border: 1px solid #86EFAC; border-radius: 10px; padding: 12px;">
-                        <strong style="font-size: 0.8rem; color: #065F46; text-transform: uppercase;">Autonomous Action Target:</strong>
+                        <strong style="font-size: 0.8rem; color: #065F46; text-transform: uppercase;">{act_lbl}</strong>
                         <div style="font-size: 0.92rem; color: #064E3B; font-weight: 700; margin-top: 4px;">
-                            {rep['action_plan']} — <span style="text-decoration: underline;">{rep['recommended_department']}</span>
+                            {rep['action_plan']} — <span style="text-decoration: underline;">{dept_val}</span>
                         </div>
                     </div>
                 </div>
@@ -1372,15 +1429,12 @@ def render_ai_investigation_workspace(lang: str = "en"):
         """, unsafe_allow_html=True)
 
         # Stage 3: Affirmative Confirmation
-        st.markdown("#### 3. Citizen Affirmative Authorization")
-        st.markdown(
-            "🔒 **Strict Human Affirmation Protocol:** The AI agent has diagnosed the issue and verified that no active duplicate exists. "
-            "Please confirm your authorization to officially register this civic case in the municipal ledger."
-        )
+        st.markdown(f"#### {t('human_affirmation_heading', lang)}")
+        st.markdown(t("human_affirmation_text", lang))
 
         confirm_col1, confirm_col2 = st.columns([0.45, 0.55])
         with confirm_col1:
-            if st.button("✍️ Confirm & Officially File Complaint", type="primary", use_container_width=True, key="btn_confirm_file"):
+            if st.button(t("btn_confirm_file", lang), type="primary", use_container_width=True, key="btn_confirm_file"):
                 trail = st.session_state.current_trail
                 reg_res = agent.run_complaint_registration_step(
                     confirmed_payload={
@@ -1403,7 +1457,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
                 if reg_res.get("status") == "registered":
                     cid = reg_res.get("complaint_id")
                     st.session_state.registered_case_id = cid
-                    st.success(f"🎉 **Case Created Successfully! Assigned ID: `{cid}`**")
+                    st.success(f"{t('case_created_success', lang)} `{cid}`")
                     st.balloons()
 
 
@@ -1414,78 +1468,82 @@ def render_ai_mission_control_workshop(lang: str = "en"):
     OBSERVE → ANALYZE → LOCATE → ROUTE → REGISTER.
     Displays live tool inputs, outputs, timestamps, and execution states from ActionTrail.
     """
-    st.markdown("""
+    m_tag = t("mission_tag", lang)
+    m_head = t("mission_headline", lang)
+    m_desc = t("mission_desc", lang)
+
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                CIVIC AI MISSION CONTROL • AGENT WORKSHOP
+                {m_tag}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                🚀 Autonomous Cognitive Perception & Tool Execution Engine
+                {m_head}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Inspect the real 10-stage cognitive perception and autonomous dispatch pipeline. See actual tool arguments, hashes, department routing, and ACID transaction commits.
+                {m_desc}
             </p>
         </div>
     """, unsafe_allow_html=True)
 
     # 5 High-Level Cognitive Blocks
-    st.markdown("""
+    st.markdown(f"""
         <div class="pipeline-flow-banner">
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">👁️</div>
-                <div class="pipeline-node-name">1. OBSERVE</div>
-                <span style="font-size: 0.72rem; color: #64748B;">Perceptual Hash</span>
+                <div class="pipeline-node-name">{t("node_observe", lang)}</div>
+                <span style="font-size: 0.72rem; color: #64748B;">{t("node_observe_sub", lang)}</span>
             </div>
             <div class="pipeline-arrow">➔</div>
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">🧠</div>
-                <div class="pipeline-node-name">2. ANALYZE</div>
-                <span style="font-size: 0.72rem; color: #64748B;">Vision Topography</span>
+                <div class="pipeline-node-name">{t("node_analyze", lang)}</div>
+                <span style="font-size: 0.72rem; color: #64748B;">{t("node_analyze_sub", lang)}</span>
             </div>
             <div class="pipeline-arrow">➔</div>
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">📍</div>
-                <div class="pipeline-node-name">3. LOCATE</div>
-                <span style="font-size: 0.72rem; color: #64748B;">Ward Directory</span>
+                <div class="pipeline-node-name">{t("node_locate", lang)}</div>
+                <span style="font-size: 0.72rem; color: #64748B;">{t("node_locate_sub", lang)}</span>
             </div>
             <div class="pipeline-arrow">➔</div>
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">🚦</div>
-                <div class="pipeline-node-name">4. ROUTE</div>
-                <span style="font-size: 0.72rem; color: #64748B;">Matrix Dispatch</span>
+                <div class="pipeline-node-name">{t("node_route", lang)}</div>
+                <span style="font-size: 0.72rem; color: #64748B;">{t("node_route_sub", lang)}</span>
             </div>
             <div class="pipeline-arrow">➔</div>
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">🛡️</div>
-                <div class="pipeline-node-name">5. REGISTER</div>
-                <span style="font-size: 0.72rem; color: #64748B;">ACID Ledger Commit</span>
+                <div class="pipeline-node-name">{t("node_register", lang)}</div>
+                <span style="font-size: 0.72rem; color: #64748B;">{t("node_register_sub", lang)}</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
     # Scenario Runner for live pipeline inspection
-    st.markdown("### ⚡ Live Autonomous Pipeline Inspector")
-    st.caption("Select a scenario incident to trigger real agent tools and inspect chronological execution states:")
+    st.markdown(f"### {t('pipeline_inspector_title', lang)}")
+    st.caption(t("pipeline_inspector_desc", lang))
 
     p_col1, p_col2, p_col3, p_col4 = st.columns(4)
     sel_scenario = st.session_state.get("workshop_scenario", "pothole")
 
-    if p_col1.button("🕳️ Bengaluru Pothole", use_container_width=True, type="primary" if sel_scenario == "pothole" else "secondary", key="ws_btn_pothole"):
+    if p_col1.button(f"🕳️ {t('scenario_bengaluru_pothole', lang)}", use_container_width=True, type="primary" if sel_scenario == "pothole" else "secondary", key="ws_btn_pothole"):
         st.session_state.workshop_scenario = "pothole"
         st.session_state.workshop_trail = None
         st.rerun()
 
-    if p_col2.button("🗑️ Mumbai Garbage", use_container_width=True, type="primary" if sel_scenario == "garbage" else "secondary", key="ws_btn_garbage"):
+    if p_col2.button(f"🗑️ {t('scenario_mumbai_garbage', lang)}", use_container_width=True, type="primary" if sel_scenario == "garbage" else "secondary", key="ws_btn_garbage"):
         st.session_state.workshop_scenario = "garbage"
         st.session_state.workshop_trail = None
         st.rerun()
 
-    if p_col3.button("💡 Delhi Streetlight", use_container_width=True, type="primary" if sel_scenario == "streetlight" else "secondary", key="ws_btn_light"):
+    if p_col3.button(f"💡 {t('scenario_delhi_light', lang)}", use_container_width=True, type="primary" if sel_scenario == "streetlight" else "secondary", key="ws_btn_light"):
         st.session_state.workshop_scenario = "streetlight"
         st.session_state.workshop_trail = None
         st.rerun()
 
-    if p_col4.button("🌊 Ahmedabad Drainage", use_container_width=True, type="primary" if sel_scenario == "drainage" else "secondary", key="ws_btn_drain"):
+    if p_col4.button(f"🌊 {t('scenario_ahmedabad_drain', lang)}", use_container_width=True, type="primary" if sel_scenario == "drainage" else "secondary", key="ws_btn_drain"):
         st.session_state.workshop_scenario = "drainage"
         st.session_state.workshop_trail = None
         st.rerun()
@@ -1506,7 +1564,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
         with open(sample_file, "rb") as f:
             sample_bytes = f.read()
 
-        if st.button("🚀 Trigger Real 10-Stage Agent Execution", type="primary", use_container_width=True, key="btn_trigger_workshop"):
+        if st.button(t("btn_trigger_pipeline", lang), type="primary", use_container_width=True, key="btn_trigger_workshop"):
             with st.spinner("🤖 Autonomous Civic Agent orchestrating 10 sequential tools..."):
                 img_hash = tools.compute_image_hash(sample_bytes)
                 p_state, trail = agent.run_reporting_agent_pipeline(
@@ -1551,7 +1609,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
 
     if trail_to_show:
         steps = trail_to_show.get_steps()
-        st.markdown(f"#### 📋 Chronological Stage Execution Log ({len(steps)} Recorded Stages)")
+        st.markdown(f"#### {t('execution_log_title', lang)} ({len(steps)})")
 
         for step in steps:
             s_num = step.get("stage_number", 1)
@@ -1559,7 +1617,8 @@ def render_ai_mission_control_workshop(lang: str = "en"):
             t_time = step.get("timestamp", "")
             t_args = step.get("input_arguments", {})
             t_res = step.get("output_result", {})
-            t_desc = COMPLAINT_STAGES.get(s_num, f"Stage {s_num}")
+            raw_desc = COMPLAINT_STAGES.get(s_num, f"Stage {s_num}")
+            t_desc = t(raw_desc, lang)
 
             st.markdown(f"""
                 <div class="stage-card-workshop">
@@ -1573,11 +1632,11 @@ def render_ai_mission_control_workshop(lang: str = "en"):
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
                         <div style="background: #FAF3E8; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
-                            <strong style="color: #7C6044;">Tool Arguments (Input):</strong>
+                            <strong style="color: #7C6044;">{t('tool_input_label', lang)}</strong>
                             <pre style="margin: 4px 0 0 0; color: #243B63; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_args, indent=2)}</pre>
                         </div>
                         <div style="background: #ECFDF5; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
-                            <strong style="color: #065F46;">Execution Result (Output):</strong>
+                            <strong style="color: #065F46;">{t('tool_output_label', lang)}</strong>
                             <pre style="margin: 4px 0 0 0; color: #064E3B; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_res, indent=2)}</pre>
                         </div>
                     </div>
@@ -1597,16 +1656,16 @@ def render_repair_story(lang: str = "en"):
     Chapter 06 — Resolved
     Includes embedded natural language AI tracking assistant.
     """
-    st.markdown("""
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                THE REPAIR STORY
+                {t('story_tag', lang)}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                📖 Journey of a Problem Toward Resolution
+                {t('story_headline', lang)}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Every civic incident has a story. Track its progression through 6 verifiable milestone chapters.
+                {t('story_desc', lang)}
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -1615,44 +1674,45 @@ def render_repair_story(lang: str = "en"):
     search_id = st.session_state.get("tracking_search_id", "NS-DEMO-A101B202")
     t_c1, t_c2 = st.columns([0.75, 0.25])
     with t_c1:
-        entered_id = st.text_input("Enter Complaint Tracking ID", value=search_id, key="txt_track_search")
+        entered_id = st.text_input(t("enter_tracking_id", lang), value=search_id, key="txt_track_search")
     with t_c2:
         st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-        if st.button("🔍 Find Story", type="primary", use_container_width=True):
+        if st.button(t("btn_find_story", lang), type="primary", use_container_width=True):
             st.session_state.tracking_search_id = entered_id
             st.rerun()
 
-    st.caption("Quick Demo Stories:")
+    st.caption(t("quick_demo_stories", lang))
     p_c1, p_c2, p_c3 = st.columns(3)
-    if p_c1.button("🕳️ NS-DEMO-A101B202 (Road)", use_container_width=True):
+    if p_c1.button(f"🕳️ {t('demo_road_story', lang)}", use_container_width=True):
         st.session_state.tracking_search_id = "NS-DEMO-A101B202"
         st.rerun()
-    if p_c2.button("🗑️ NS-DEMO-C303D404 (Waste)", use_container_width=True):
+    if p_c2.button(f"🗑️ {t('demo_waste_story', lang)}", use_container_width=True):
         st.session_state.tracking_search_id = "NS-DEMO-C303D404"
         st.rerun()
-    if p_c3.button("💡 NS-DEMO-E505F606 (Lighting)", use_container_width=True):
+    if p_c3.button(f"💡 {t('demo_light_story', lang)}", use_container_width=True):
         st.session_state.tracking_search_id = "NS-DEMO-E505F606"
         st.rerun()
 
     complaint = database.get_complaint(st.session_state.get("tracking_search_id", entered_id))
     if not complaint:
-        st.warning(f"Complaint ID `{entered_id}` was not found in the official registry. Please check the ID.")
+        st.warning(f"{t('complaint_not_found', lang)} ({entered_id})")
         return
 
     curr_status = complaint.get("status", "Reported")
     status_order = ["Reported", "Assigned", "In Progress", "Awaiting Verification", "Resolved"]
     curr_idx = status_order.index(curr_status) if curr_status in status_order else 0
 
+    dept_tr = t(complaint.get('department', 'Municipal Authority'), lang)
     chapters = [
-        {"num": "01", "name": "DISCOVERED", "desc": "Defect spotted and photographed by citizen.", "stage": 0},
-        {"num": "02", "name": "REPORTED", "desc": "Photographic evidence submitted & verified by AI agent.", "stage": 0},
-        {"num": "03", "name": "ASSIGNED", "desc": f"Dispatched to {complaint.get('department')} ({complaint.get('ward')}).", "stage": 1},
-        {"num": "04", "name": "WORK IN PROGRESS", "desc": "Field engineer dispatched; repair materials and crew on site.", "stage": 2},
-        {"num": "05", "name": "VERIFICATION", "desc": "CivicTwin Before/After physical restoration comparison.", "stage": 3},
-        {"num": "06", "name": "RESOLVED", "desc": "Repair verified with municipal administrative confirmation.", "stage": 4},
+        {"num": "01", "name": t("ch1_title", lang), "desc": t("ch1_desc", lang), "stage": 0},
+        {"num": "02", "name": t("ch2_title", lang), "desc": t("ch2_desc", lang), "stage": 0},
+        {"num": "03", "name": t("ch3_title", lang), "desc": f"{t('ch3_desc', lang)} ({dept_tr}, {complaint.get('ward')}).", "stage": 1},
+        {"num": "04", "name": t("ch4_title", lang), "desc": t("ch4_desc", lang), "stage": 2},
+        {"num": "05", "name": t("ch5_title", lang), "desc": t("ch5_desc", lang), "stage": 3},
+        {"num": "06", "name": t("ch6_title", lang), "desc": t("ch6_desc", lang), "stage": 4},
     ]
 
-    st.markdown("### 📜 Story Chapters")
+    st.markdown(f"### {t('story_chapters_title', lang)}")
     for ch in chapters:
         is_active = ch["stage"] <= curr_idx
         card_cls = "story-chapter-card" if is_active else "story-chapter-card inactive"
@@ -1668,16 +1728,16 @@ def render_repair_story(lang: str = "en"):
 
     # Integrated AI Tracking Assistant
     st.markdown("---")
-    st.markdown("### 🤖 Ask AI Assistant About This Complaint")
-    st.caption("Ask questions about department dispatch, expected completion, or audit events:")
+    st.markdown(f"### {t('ask_ai_complaint_title', lang)}")
+    st.caption(t("ask_ai_complaint_caption", lang))
     
-    t_chat_query = st.text_input("Ask a question about this complaint", value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}")
-    if st.button("Ask Assistant", type="primary", key=f"btn_ask_{complaint['id']}"):
+    t_chat_query = st.text_input(t("ask_ai_complaint_title", lang), value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}")
+    if st.button(t("btn_ask_assistant", lang), type="primary", key=f"btn_ask_{complaint['id']}"):
         with st.spinner("🤖 Consulting civic agent and database records..."):
             ans = agent.run_tracking_chat_agent(t_chat_query, db_path=DB_PATH)
             st.markdown(f"""
                 <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 14px; padding: 18px; margin-top: 12px;">
-                    <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">Autonomous Civic Assistant:</strong>
+                    <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}</strong>
                     <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 4px;">{ans.get('reply', '')}</div>
                 </div>
             """, unsafe_allow_html=True)
@@ -1690,16 +1750,16 @@ def render_civictwin_studio(lang: str = "en"):
     Visual comparison, AI topographical observations, visible repair differences,
     verification report, and official administrative confirmation sign-off.
     """
-    st.markdown("""
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                CIVICTWIN TRANSFORMATION STUDIO
+                {t('twin_tag', lang)}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                ♊ Physical Verification & Restoration Inspector
+                {t('twin_headline', lang)}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Inspect and verify physical infrastructure repairs side-by-side using multimodal computer vision before closing municipal records.
+                {t('twin_desc', lang)}
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -1708,13 +1768,18 @@ def render_civictwin_studio(lang: str = "en"):
     all_complaints = database.list_complaints(limit=50)
     c_ids = [c["id"] for c in all_complaints] if all_complaints else ["NS-DEMO-A101B202"]
     
-    sel_cid = st.selectbox("Select Complaint Case for Verification Inspection", options=c_ids, index=0, key="twin_sel_cid")
+    sel_cid = st.selectbox(t("twin_select_label", lang), options=c_ids, index=0, key="twin_sel_cid")
     comp_obj = database.get_complaint(sel_cid) or {"issue_type": "Potholes and damaged roads", "status": "In Progress", "locality": "Indiranagar"}
+
+    cat_tr = t(comp_obj.get('issue_type', 'Potholes and damaged roads'), lang)
+    status_tr = t(comp_obj.get('status', 'In Progress'), lang)
+    loc_tr = t(comp_obj.get('locality', 'Local'), lang)
+    city_tr = t(comp_obj.get('city', 'City'), lang)
 
     st.markdown(f"""
         <div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-            <strong>Case File:</strong> {sel_cid} • <strong>Category:</strong> {comp_obj.get('issue_type')} • <strong>Status:</strong> {comp_obj.get('status')}
-            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">Jurisdiction: {comp_obj.get('locality', 'Local')}, {comp_obj.get('city', 'City')}</div>
+            <strong>{t('case_dossier_tag', lang)}:</strong> {sel_cid} • <strong>{t('diagnosis_label', lang)}:</strong> {cat_tr} • <strong>{t('status_label', lang)}:</strong> {status_tr}
+            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">{loc_tr}, {city_tr}</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1725,17 +1790,17 @@ def render_civictwin_studio(lang: str = "en"):
 
     tw_col1, tw_col2 = st.columns(2)
     with tw_col1:
-        st.markdown("**Original Damage (Before)**")
+        st.markdown(f"**{t('before_photo_label', lang)}**")
         if before_file.exists():
-            st.image(str(before_file), caption="Pre-Repair Incident Evidence", use_column_width=True)
+            st.image(str(before_file), caption=t("before_photo_label", lang), use_column_width=True)
 
     with tw_col2:
-        st.markdown("**Field Restoration Proof (After)**")
+        st.markdown(f"**{t('after_photo_label', lang)}**")
         if after_file.exists():
-            st.image(str(after_file), caption="Post-Repair Completed Surface", use_column_width=True)
+            st.image(str(after_file), caption=t("after_photo_label", lang), use_column_width=True)
 
     if before_file.exists() and after_file.exists():
-        if st.button("🚀 Run Multimodal CivicTwin Verification Inspection", type="primary", use_container_width=True, key="btn_exec_twin_studio"):
+        if st.button(t("btn_run_twin_studio", lang), type="primary", use_container_width=True, key="btn_exec_twin_studio"):
             with st.spinner("🤖 Multimodal Vision inspecting topographical restoration & quality delta..."):
                 with open(before_file, "rb") as f1, open(after_file, "rb") as f2:
                     b_bytes = f1.read()
@@ -1747,6 +1812,7 @@ def render_civictwin_studio(lang: str = "en"):
     if st.session_state.get("civictwin_res"):
         v_res = st.session_state.civictwin_res
         score_pct = int(v_res.get("verification_score", 0.95) * 100)
+        status_badge = t('verified_badge', lang) if v_res.get('resolved') else t('needs_correction_badge', lang)
 
         st.markdown("---")
         st.markdown(f"""
@@ -1754,41 +1820,41 @@ def render_civictwin_studio(lang: str = "en"):
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 12px; margin-bottom: 14px;">
                     <div>
                         <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">
-                            AI RESTORATION DELTA ANALYSIS
+                            {t('ai_delta_tag', lang)}
                         </span>
                         <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">
-                            Verification Status: {'VERIFIED RESTORATION ✅' if v_res.get('resolved') else 'NEEDS CORRECTION ⚠️'}
+                            {t('status_label', lang)}: {status_badge}
                         </h3>
                     </div>
                     <div class="civictwin-score-badge">
-                        <span>🎯</span> {score_pct}% Match Confidence
+                        <span>🎯</span> {score_pct}% {t('match_confidence', lang)}
                     </div>
                 </div>
 
                 <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
-                    <strong style="color: #7C6044; font-size: 0.85rem; text-transform: uppercase;">Topographical Difference:</strong>
+                    <strong style="color: #7C6044; font-size: 0.85rem; text-transform: uppercase;">{t('topography_diff_label', lang)}</strong>
                     <div style="font-size: 0.92rem; color: #243B63; margin-top: 4px;">{v_res.get('delta_detected', 'Asphalt surface leveled completely; void filled to flush grade with no residual craters.')}</div>
                 </div>
 
-                <strong style="color: #243B63; font-size: 0.88rem; text-transform: uppercase;">Structural Quality Checklist:</strong>
+                <strong style="color: #243B63; font-size: 0.88rem; text-transform: uppercase;">{t('checklist_title', lang)}</strong>
                 <div class="checklist-box">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.88rem; color: #243B63;">
-                        <div>✅ Surface Leveling & Uniformity: <strong>PASS</strong></div>
-                        <div>✅ Edge Compaction & Asphalt Bonding: <strong>PASS</strong></div>
-                        <div>✅ Debris & Site Clearance: <strong>PASS</strong></div>
-                        <div>✅ Drainage Slope Integrity: <strong>PASS</strong></div>
+                        <div>{t('check_1', lang)}</div>
+                        <div>{t('check_2', lang)}</div>
+                        <div>{t('check_3', lang)}</div>
+                        <div>{t('check_4', lang)}</div>
                     </div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
 
         # Officer Confirmation Sign-Off
-        st.markdown("#### 🛡️ Municipal Administrative Sign-Off")
-        st.caption("Confirm resolution in the official SQLite database ledger with cryptographic audit trail:")
+        st.markdown(f"#### {t('admin_signoff_title', lang)}")
+        st.caption(t("admin_signoff_desc", lang))
 
         sign_col1, sign_col2 = st.columns([0.45, 0.55])
         with sign_col1:
-            if st.button("✅ Confirm Official Municipal Resolution", type="primary", use_container_width=True, key="btn_confirm_twin_res"):
+            if st.button(t("btn_confirm_resolution", lang), type="primary", use_container_width=True, key="btn_confirm_twin_res"):
                 database.insert_civictwin_verification(
                     complaint_id=sel_cid,
                     before_hash="sample_pothole_verified",
@@ -1802,7 +1868,7 @@ def render_civictwin_studio(lang: str = "en"):
                     note="Multimodal CivicTwin Verification Approved by Municipal Field Inspector.",
                     db_path=DB_PATH
                 )
-                st.success(f"🎉 **Complaint `{sel_cid}` officially transitioned to RESOLVED in SQLite!**")
+                st.success(f"🎉 **Complaint `{sel_cid}` {t('resolution_committed_success', lang)}**")
                 st.balloons()
 
 
@@ -1813,23 +1879,23 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     Select neighborhood directly, view reported problems, active issues, resolved complaints,
     and local civic memory stories.
     """
-    st.markdown("""
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                NEIGHBORHOOD PULSE • GROUNDED CIVIC TELEMETRY
+                {t('pulse_tag', lang)}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                📊 Localized Civic Memory & Infrastructure Telemetry
+                {t('pulse_headline', lang)}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Explore real community telemetry grounded strictly in authentic municipal database rows across supported jurisdictions.
+                {t('pulse_desc', lang)}
             </p>
         </div>
     """, unsafe_allow_html=True)
 
     # Neighborhood Selection Pills
     localities = ["Indiranagar (Bengaluru)", "Bandra West (Mumbai)", "Connaught Place (Delhi)", "Satellite (Ahmedabad)", "Kothrud (Pune)"]
-    sel_loc = st.selectbox("Select Neighborhood to Explore", options=localities, index=0, key="pulse_sel_neighborhood")
+    sel_loc = st.selectbox(t("select_neighborhood_label", lang), options=localities, index=0, key="pulse_sel_neighborhood")
     loc_clean = sel_loc.split(" (")[0]
 
     stats = database.get_neighborhood_pulse_stats()
@@ -1843,24 +1909,24 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     st.markdown(f"""
         <div class="pulse-stat-grid">
             <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Total Reports</span>
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('total_reports', lang)}</span>
                 <div class="pulse-stat-val">{total}</div>
-                <span style="font-size: 0.76rem; color: #D96C48;">Recorded in SQLite</span>
+                <span style="font-size: 0.76rem; color: #D96C48;">{t('recorded_in_sqlite', lang)}</span>
             </div>
             <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Active In Progress</span>
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('active_in_progress', lang)}</span>
                 <div class="pulse-stat-val" style="color: #F4BB52;">{in_prog}</div>
-                <span style="font-size: 0.76rem; color: #64748B;">Crews dispatched</span>
+                <span style="font-size: 0.76rem; color: #64748B;">{t('crews_dispatched', lang)}</span>
             </div>
             <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Verified Resolved</span>
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('verified_resolved', lang)}</span>
                 <div class="pulse-stat-val" style="color: #83A98A;">{resolved}</div>
-                <span style="font-size: 0.76rem; color: #047857;">CivicTwin verified</span>
+                <span style="font-size: 0.76rem; color: #047857;">{t('civictwin_verified', lang)}</span>
             </div>
             <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Resolution Rate</span>
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('resolution_rate', lang)}</span>
                 <div class="pulse-stat-val" style="color: #243B63;">{rate:.1f}%</div>
-                <span style="font-size: 0.76rem; color: #64748B;">Overall velocity</span>
+                <span style="font-size: 0.76rem; color: #64748B;">{t('overall_velocity', lang)}</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -1869,7 +1935,7 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     summary = stats.get("ai_neighborhood_summary", "Telemetry loaded.")
     st.markdown(f"""
         <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-            <strong style="color: #D96C48; font-size: 0.84rem; text-transform: uppercase;">Civic Intelligence Synthesis • {loc_clean}:</strong>
+            <strong style="color: #D96C48; font-size: 0.84rem; text-transform: uppercase;">{t('civic_intelligence_synthesis', lang)} • {loc_clean}:</strong>
             <p style="font-size: 0.95rem; color: #243B63; margin-top: 6px; line-height: 1.5;">{summary}</p>
         </div>
     """, unsafe_allow_html=True)
@@ -1879,18 +1945,18 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     matched = [c for c in all_complaints if loc_clean.lower() in c.get("locality", "").lower()]
     cases_to_show = matched if matched else all_complaints[:5]
 
-    st.markdown(f"#### 🏘️ Active Community Case Files in {loc_clean} ({len(cases_to_show)} records)")
+    st.markdown(f"#### 🏘️ {t('active_community_cases', lang)} {loc_clean} ({len(cases_to_show)})")
     for c in cases_to_show:
         c_col1, c_col2 = st.columns([0.82, 0.18])
         with c_col1:
             st.markdown(f"""
                 <div style="background: #FFFFFF; border: 1px solid #E8DAC6; border-radius: 12px; padding: 12px 18px; margin-bottom: 8px;">
-                    <strong style="color: #243B63;">{c['id']}</strong> • <em>{c['issue_type']}</em> at <strong>{c['locality']}, {c['city']}</strong>
+                    <strong style="color: #243B63;">{c['id']}</strong> • <em>{t(c['issue_type'], lang)}</em> at <strong>{t(c['locality'], lang)}, {t(c['city'], lang)}</strong>
                     <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">{c['description']}</div>
                 </div>
             """, unsafe_allow_html=True)
         with c_col2:
-            if st.button("Inspect Dossier", key=f"btn_p_view_{c['id']}", use_container_width=True):
+            if st.button(t("btn_inspect_dossier", lang), key=f"btn_p_view_{c['id']}", use_container_width=True):
                 st.session_state.selected_case_id = c["id"]
                 st.rerun()
 
@@ -1902,16 +1968,16 @@ def render_civic_operations_studio(lang: str = "en"):
     Features complaint management, status updates, department assignments,
     repair verification, and chronological audit trail inspection.
     """
-    st.markdown("""
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #243B63;">
-                CIVIC OPERATIONS STUDIO • DISPATCH CONSOLE
+                {t('admin_tag', lang)}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                🛡️ Municipal Grievance Administration & Audit
+                {t('admin_headline', lang)}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Authorized municipal operations console for status transitions, nodal department routing, and audit trail inspection.
+                {t('admin_desc', lang)}
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -1924,9 +1990,9 @@ def render_civic_operations_studio(lang: str = "en"):
     # Filter controls
     f_col1, f_col2 = st.columns([0.6, 0.4])
     with f_col1:
-        status_filter = st.selectbox("Filter by Status", options=["All"] + VALID_STATUSES, key="admin_filter_status")
+        status_filter = st.selectbox(t("filter_status_label", lang), options=["All"] + VALID_STATUSES, key="admin_filter_status")
     with f_col2:
-        search_query = st.text_input("Search ID or Locality", value="", key="admin_search_query")
+        search_query = st.text_input(t("search_id_locality", lang), value="", key="admin_search_query")
 
     filtered = all_complaints
     if status_filter != "All":
@@ -1935,24 +2001,30 @@ def render_civic_operations_studio(lang: str = "en"):
         q = search_query.strip().lower()
         filtered = [c for c in filtered if q in c.get("id", "").lower() or q in c.get("locality", "").lower()]
 
-    st.markdown(f"**Found {len(filtered)} Matching Complaints:**")
+    st.markdown(f"**{t('found_matching_complaints', lang)} {len(filtered)}**")
 
     c_ids = [c["id"] for c in filtered] if filtered else [all_complaints[0]["id"]]
-    sel_id = st.selectbox("Select Complaint to Manage", options=c_ids, key="admin_sel_cid")
+    sel_id = st.selectbox(t("select_complaint_manage", lang), options=c_ids, key="admin_sel_cid")
 
     complaint = database.get_complaint(sel_id)
     if complaint:
+        c_issue = t(complaint.get('issue_type', ''), lang)
+        c_status = t(complaint.get('status', ''), lang)
+        c_loc = t(complaint.get('locality', ''), lang)
+        c_city = t(complaint.get('city', ''), lang)
+        c_dept = t(complaint.get('department', ''), lang)
+
         st.markdown(f"""
             <div class="admin-op-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #DFCAB0; padding-bottom: 10px; margin-bottom: 12px;">
                     <div>
                         <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700; color: #D96C48;">CASE ID: {complaint.get('id')}</span>
-                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">{complaint.get('issue_type')}</h3>
+                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">{c_issue}</h3>
                     </div>
-                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">STATUS: {complaint.get('status').upper()}</span>
+                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">{t('status_label', lang)}: {c_status.upper()}</span>
                 </div>
                 <div style="font-size: 0.92rem; color: #243B63;">
-                    📍 <strong>{complaint.get('locality')}, {complaint.get('city')}</strong> • Ward: <code>{complaint.get('ward')}</code> • Department: <strong>{complaint.get('department')}</strong>
+                    📍 <strong>{c_loc}, {c_city}</strong> • {t('ward_label', lang)}: <code>{complaint.get('ward')}</code> • {t('assigned_authority', lang)}: <strong>{c_dept}</strong>
                 </div>
                 <div style="font-size: 0.88rem; color: #64748B; margin-top: 6px;">
                     <em>"{complaint.get('description')}"</em>
@@ -1964,21 +2036,21 @@ def render_civic_operations_studio(lang: str = "en"):
         with ctrl_col1:
             curr_s = complaint.get("status", "Reported")
             s_idx = VALID_STATUSES.index(curr_s) if curr_s in VALID_STATUSES else 0
-            new_status = st.selectbox("Update Status Transition", options=VALID_STATUSES, index=s_idx, key="admin_status_select")
+            new_status = st.selectbox(t("update_status_transition", lang), options=VALID_STATUSES, index=s_idx, key="admin_status_select")
 
         with ctrl_col2:
-            officer_notes = st.text_input("Officer Action Notes", value="Verified on-site by municipal assessment team.", key="admin_officer_notes")
+            officer_notes = st.text_input(t("officer_action_notes", lang), value="Verified on-site by municipal assessment team.", key="admin_officer_notes")
 
         btn_commit, btn_twin_jump = st.columns([0.5, 0.5])
         with btn_commit:
-            if st.button("💾 Commit Status Transition to SQLite", type="primary", use_container_width=True, key="btn_commit_admin"):
+            if st.button(t("btn_commit_status", lang), type="primary", use_container_width=True, key="btn_commit_admin"):
                 success = database.update_complaint_status(sel_id, new_status, note=officer_notes)
                 if success:
-                    st.success(f"Status for `{sel_id}` officially updated to **{new_status}**.")
+                    st.success(f"Status for `{sel_id}` officially updated to **{t(new_status, lang)}**.")
                     st.rerun()
 
         with btn_twin_jump:
-            if st.button("♊ Open in CivicTwin Studio", use_container_width=True, key=f"btn_admin_twin_{sel_id}"):
+            if st.button(t("btn_open_twin_studio", lang), use_container_width=True, key=f"btn_admin_twin_{sel_id}"):
                 st.session_state.street_active_view = "civictwin"
                 st.session_state.twin_sel_cid = sel_id
                 st.session_state.selected_case_id = None
@@ -1990,40 +2062,44 @@ def render_ai_companion_drawer(lang: str = "en"):
     Renders the compact AI City Companion overlay.
     Lives cleanly inside the command capsule context without taking over the screen.
     """
-    st.markdown("""
+    st.markdown(f"""
         <div style="margin-bottom: 1rem;">
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                AI CITY COMPANION
+                {t('companion_tag', lang)}
             </span>
             <h2 style="font-family: 'Fraunces', serif; font-size: 1.8rem; color: #243B63; margin: 0;">
-                🤖 Your Grounded Civic Assistant
+                {t('companion_headline', lang)}
             </h2>
             <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Ask questions about complaint routing, department responsibilities, or municipal resolution metrics.
+                {t('companion_desc', lang)}
             </p>
         </div>
     """, unsafe_allow_html=True)
 
     # Prompt suggestions
-    st.caption("Prompt Suggestions:")
+    st.caption(t("prompt_suggestions_label", lang))
     p1, p2, p3 = st.columns(3)
     preset_query = None
-    if p1.button("Which dept handles potholes?", use_container_width=True):
+    pr1 = t("prompt_1", lang)
+    pr2 = t("prompt_2", lang)
+    pr3 = t("prompt_3", lang)
+
+    if p1.button(pr1, use_container_width=True):
         preset_query = "Which department handles potholes in Bengaluru?"
-    if p2.button("Track NS-DEMO-A101B202", use_container_width=True):
+    if p2.button(pr2, use_container_width=True):
         preset_query = "What is the status of complaint NS-DEMO-A101B202?"
-    if p3.button("Neighborhood stats", use_container_width=True):
+    if p3.button(pr3, use_container_width=True):
         preset_query = "Show neighborhood statistics and resolution rates."
 
-    user_query = st.text_input("Ask a question to the Civic Assistant", value=preset_query or "", placeholder="e.g. How does NazarSetu verify road repairs?", key="companion_query_input")
+    user_query = st.text_input(t("companion_headline", lang), value=preset_query or "", placeholder=t("ask_assistant_placeholder", lang), key="companion_query_input")
     
-    if st.button("Send Query", type="primary", key="btn_send_companion") or preset_query:
+    if st.button(t("btn_send_query", lang), type="primary", key="btn_send_companion") or preset_query:
         if user_query:
             with st.spinner("🤖 Consulting civic agent and SQLite database..."):
                 reply = agent.run_tracking_chat_agent(user_query, db_path=DB_PATH)
                 st.markdown(f"""
                     <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.08); margin-top: 14px;">
-                        <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">Autonomous Civic Assistant Response:</strong>
+                        <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}</strong>
                         <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">
                             {reply.get('reply', '')}
                         </div>
@@ -2115,22 +2191,22 @@ def render_streetverse():
     # Main Street Scene (Default View)
     elif active_view == "street":
         # Render the handcrafted 2.5D SVG Street Scene
-        st.markdown(render_streetverse_svg(category_counts, active_states={"road": "alert" if category_counts["Potholes and damaged roads"] > 0 else "smooth"}), unsafe_allow_html=True)
+        st.markdown(render_streetverse_svg(category_counts, active_states={"road": "alert" if category_counts["Potholes and damaged roads"] > 0 else "smooth"}, lang=st.session_state.lang), unsafe_allow_html=True)
 
-        # Hotspot Click Cards right below the SVG for direct exploration
-        st.markdown("### 🏘️ Interactive Infrastructure Signals")
-        st.caption("Click any infrastructure point to inspect live civic records or report a new problem:")
+        lang = st.session_state.lang
+        st.markdown(f"### 🏘️ {t('street_signals_title', lang)}")
+        st.caption(t("street_signals_desc", lang))
 
         h_col1, h_col2, h_col3, h_col4 = st.columns(4)
         with h_col1:
             st.markdown(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🕳️</span>
-                    <strong style="color: #D96C48; font-size: 0.95rem; display: block; margin-top: 4px;">Damaged Road</strong>
-                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Potholes and damaged roads']} active reports</span>
+                    <strong style="color: #D96C48; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_road_title', lang)}</strong>
+                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Potholes and damaged roads']} {t('active_reports_sub', lang)}</span>
                 </div>
             """, unsafe_allow_html=True)
-            if st.button("Inspect Road Cases", key="btn_h_road", use_container_width=True):
+            if st.button(t("hotspot_road_btn", lang), key="btn_h_road", use_container_width=True):
                 st.session_state.selected_hotspot = "road"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
@@ -2139,11 +2215,11 @@ def render_streetverse():
             st.markdown(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">💡</span>
-                    <strong style="color: #F4BB52; font-size: 0.95rem; display: block; margin-top: 4px;">Streetlights</strong>
-                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Broken streetlights']} lighting incidents</span>
+                    <strong style="color: #F4BB52; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_light_title', lang)}</strong>
+                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Broken streetlights']} {t('lighting_incidents_sub', lang)}</span>
                 </div>
             """, unsafe_allow_html=True)
-            if st.button("Inspect Streetlights", key="btn_h_light", use_container_width=True):
+            if st.button(t("hotspot_light_btn", lang), key="btn_h_light", use_container_width=True):
                 st.session_state.selected_hotspot = "streetlight"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
@@ -2152,11 +2228,11 @@ def render_streetverse():
             st.markdown(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🗑️</span>
-                    <strong style="color: #83A98A; font-size: 0.95rem; display: block; margin-top: 4px;">Waste Collection</strong>
-                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Overflowing garbage']} waste points</span>
+                    <strong style="color: #83A98A; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_waste_title', lang)}</strong>
+                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Overflowing garbage']} {t('waste_points_sub', lang)}</span>
                 </div>
             """, unsafe_allow_html=True)
-            if st.button("Inspect Waste Cases", key="btn_h_waste", use_container_width=True):
+            if st.button(t("hotspot_waste_btn", lang), key="btn_h_waste", use_container_width=True):
                 st.session_state.selected_hotspot = "garbage"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
@@ -2165,11 +2241,11 @@ def render_streetverse():
             st.markdown(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🌊</span>
-                    <strong style="color: #243B63; font-size: 0.95rem; display: block; margin-top: 4px;">Storm Drain</strong>
-                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Waterlogging and drainage issues']} drainage issues</span>
+                    <strong style="color: #243B63; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_drain_title', lang)}</strong>
+                    <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Waterlogging and drainage issues']} {t('drainage_issues_sub', lang)}</span>
                 </div>
             """, unsafe_allow_html=True)
-            if st.button("Inspect Drainage", key="btn_h_drain", use_container_width=True):
+            if st.button(t("hotspot_drain_btn", lang), key="btn_h_drain", use_container_width=True):
                 st.session_state.selected_hotspot = "drainage"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
@@ -2204,4 +2280,4 @@ def render_streetverse():
     render_floating_capsule(active_view, lang=st.session_state.lang)
 
     # Floating Real-Data Activity Indicator
-    render_activity_pill(stats)
+    render_activity_pill(stats, lang=st.session_state.lang)

@@ -195,7 +195,12 @@ def test_neighborhood_pulse_telemetry(temp_db):
 
 # 5. Test Multilingual Accessibility Engine
 def test_multilingual_translations():
-    keys = ["nav_overview", "nav_report", "nav_mission_control", "nav_civictwin", "nav_neighborhood_pulse"]
+    keys = [
+        "nav_overview", "nav_report", "nav_mission_control", "nav_civictwin", "nav_neighborhood_pulse",
+        "streetverse_tagline", "capsule_explore", "capsule_report", "capsule_mission", "capsule_track",
+        "hotspot_road_title", "case_dossier_tag", "inv_tag", "mission_tag", "story_tag", "twin_tag",
+        "pulse_tag", "admin_tag", "companion_tag", "btn_confirm_file", "btn_inspect_dossier"
+    ]
     for k in keys:
         en_val = t(k, "en")
         hi_val = t(k, "hi")
@@ -206,6 +211,13 @@ def test_multilingual_translations():
         assert gu_val != ""
         assert hi_val != en_val  # Verified distinct Hindi translation
         assert gu_val != en_val  # Verified distinct Gujarati translation
+
+    # Bi-directional reverse matching (natural English phrase -> translation)
+    assert t("Potholes and damaged roads", "hi") == "सड़क के गड्ढे एवं क्षतिग्रस्त मार्ग"
+    assert t("Broken streetlights", "gu") == "બંધ સ્ટ્રીટલાઇટ"
+    assert t("Reported", "hi") == "दर्ज (Reported)"
+    assert t("Resolved", "gu") == "ઉકેલાઈ ગયેલ (Resolved)"
+    assert t("High", "hi") == "उच्च (High)"
 
     # Fallback to key if unknown
     assert t("non_existent_key_xyz", "en") == "non_existent_key_xyz"
