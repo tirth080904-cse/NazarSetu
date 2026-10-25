@@ -43,6 +43,20 @@ import agent
 from i18n import t
 
 
+def render_html(html_str: str):
+    """
+    Safely render HTML without Markdown indented code block formatting.
+    Strips leading and trailing whitespace from every line so Markdown parsers
+    never convert indented HTML blocks into <pre><code> code blocks.
+    """
+    cleaned_lines = [line.strip() for line in html_str.splitlines() if line.strip()]
+    cleaned_html = "\n".join(cleaned_lines)
+    if hasattr(st, "html"):
+        st.html(cleaned_html)
+    else:
+        st.markdown(cleaned_html, unsafe_allow_html=True)
+
+
 HOTSPOT_METADATA = {
     "road": {
         "title": "Damaged Road Carriage & Potholes",
@@ -1183,7 +1197,7 @@ def render_floating_header(lang: str = "en"):
 
     col1, col2 = st.columns([0.65, 0.35])
     with col1:
-        st.markdown(f"""
+        render_html(f"""
             <div class="streetverse-topbar" style="margin-bottom: 0;">
                 <div class="streetverse-brand">
                     <div class="brand-emblem">🛡️</div>
@@ -1193,7 +1207,7 @@ def render_floating_header(lang: str = "en"):
                     </div>
                 </div>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with col2:
         top_ctrl1, top_ctrl2 = st.columns([0.60, 0.40])
@@ -1288,12 +1302,12 @@ def render_activity_pill(stats: Dict[str, Any], lang: str = "en"):
     lbl_prog = t("In Progress", lang)
     lbl_res = t("Resolved", lang)
 
-    st.markdown(f"""
+    render_html(f"""
         <div class="civic-activity-badge">
             <span class="pulse-dot"></span>
             <span><strong>{lbl_telem}:</strong> {total} {lbl_rep} • {in_prog} {lbl_prog} • {resolved} {lbl_res}</span>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
 
 def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
@@ -1335,7 +1349,7 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
     auth_lbl = t("assigned_authority", lang)
     time_lbl = t("filing_timestamp", lang)
 
-    st.markdown(f"""
+    render_html(f"""
         <div class="case-file-dossier">
             <div class="case-file-header">
                 <div>
@@ -1375,15 +1389,15 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
                 </div>
             </div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Chronological Audit Trail
     events = database.get_complaint_timeline(cid)
     if events:
         st.markdown(f"#### 📜 {t('official_event_trail', lang)}")
-        st.markdown('<div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 14px 20px; margin-bottom: 18px; box-shadow: 0 4px 14px rgba(36, 59, 99, 0.04);">', unsafe_allow_html=True)
+        events_html = ['<div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 14px 20px; margin-bottom: 18px; box-shadow: 0 4px 14px rgba(36, 59, 99, 0.04);">']
         for ev in events:
-            st.markdown(f"""
+            events_html.append(f"""
                 <div style="display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed #DFCAB0;">
                     <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #D96C48; width: 160px; font-weight: 600;">
                         ⏱️ {ev.get('created_at', '')}
@@ -1393,8 +1407,9 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
                         <div style="font-size: 0.85rem; color: #64748B; margin-top: 2px;">{ev.get('details', '')}</div>
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+            """)
+        events_html.append('</div>')
+        render_html("".join(events_html))
 
     btn_c1, btn_c2 = st.columns([0.4, 0.6])
     with btn_c1:
@@ -1423,7 +1438,7 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
     lbl_nodal = t("responsible_nodal_body", lang)
     btn_report_lbl = t("report_at_location", lang)
 
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge" style="color: {meta['color']}; border-color: {meta['color']};">
                 {meta['icon']} {tag_insp} • {lbl_nodal}: {c_dept}
@@ -1431,7 +1446,7 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
             <h1 class="hero-page-title">{c_title}</h1>
             <p class="hero-page-desc">{c_hint}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     h_col1, h_col2 = st.columns([0.7, 0.3])
     with h_col2:
@@ -1453,7 +1468,7 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
         for comp in complaints:
             c_col1, c_col2 = st.columns([0.82, 0.18])
             with c_col1:
-                st.markdown(f"""
+                render_html(f"""
                     <div style="background: #FFFFFF; border: 1.5px solid #E8DAC6; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px;">
                         <div style="display: flex; justify-content: space-between;">
                             <strong style="color: #243B63; font-size: 0.95rem;">{comp['id']} • {t(comp['locality'], lang)}, {t(comp['city'], lang)}</strong>
@@ -1461,7 +1476,7 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
                         </div>
                         <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">{comp['description']}</div>
                     </div>
-                """, unsafe_allow_html=True)
+                """)
             with c_col2:
                 if st.button(t("btn_inspect_dossier", lang), key=f"btn_view_{comp['id']}", use_container_width=True):
                     st.session_state.selected_case_id = comp["id"]
@@ -1485,23 +1500,23 @@ def render_ai_investigation_workspace(lang: str = "en"):
     p4 = t("stage_4_pill", lang)
 
     # Streetverse Page Hero
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">🔍 {tag_inv}</div>
             <h1 class="hero-page-title">{head_inv}</h1>
             <p class="hero-page-desc">{desc_inv}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Stage Indicators
-    st.markdown(f"""
+    render_html(f"""
         <div style="display: flex; gap: 8px; margin-bottom: 1.4rem; flex-wrap: wrap;">
             <div class="investigation-step-pill active">{p1}</div>
             <div class="investigation-step-pill">{p2}</div>
             <div class="investigation-step-pill">{p3}</div>
             <div class="investigation-step-pill">{p4}</div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     col_input, col_preview = st.columns([0.55, 0.45])
     sample_dir = Path(__file__).resolve().parent / "data" / "samples"
@@ -1582,31 +1597,27 @@ def render_ai_investigation_workspace(lang: str = "en"):
     with col_preview:
         if uploaded_file:
             image_bytes = uploaded_file.getvalue()
-            st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
             st.image(image_bytes, caption="Uploaded Evidence", use_column_width=True)
-            st.markdown(f"""
+            render_html(f"""
                 <div class="polaroid-badge">
                     <span>EVIDENCE DOSSIER</span>
                     <span>LIVE UPLOAD</span>
                 </div>
-            </div>
-            """, unsafe_allow_html=True)
+            """)
         elif st.session_state.get("selected_sample"):
             sample_file = sample_dir / st.session_state.selected_sample
             if sample_file.exists():
                 with open(sample_file, "rb") as f:
                     image_bytes = f.read()
-                st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
                 st.image(image_bytes, caption=f"Demo Incident: {st.session_state.selected_sample}", use_column_width=True)
-                st.markdown(f"""
+                render_html(f"""
                     <div class="polaroid-badge">
                         <span>ARCHIVED EVIDENCE</span>
                         <span>{st.session_state.get('sample_city', 'URBAN')}</span>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                """)
         else:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="polaroid-frame" style="padding: 48px 20px;">
                     <div style="font-size: 2.4rem; margin-bottom: 10px;">📷</div>
                     <div style="font-family: 'Fraunces', serif; font-size: 1.15rem; color: #243B63; font-weight: 700;">
@@ -1616,11 +1627,11 @@ def render_ai_investigation_workspace(lang: str = "en"):
                         Select a test incident or upload camera footage to begin AI investigation.
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
 
     # Action Button
     if image_bytes:
-        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
+        render_html("<div style='margin-top: 14px;'></div>")
         if st.button(t("btn_run_investigation", lang), type="primary", use_container_width=True, key="btn_run_investigation"):
             with st.spinner("🤖 Multimodal Vision Engine analyzing surface topography, severity & risk..."):
                 hint_cat = st.session_state.get("sample_hint", "Potholes and damaged roads")
@@ -1658,7 +1669,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
         sev_val = t(rep['severity'], lang)
         dept_val = t(rep['recommended_department'], lang)
 
-        st.markdown(f"""
+        render_html(f"""
             <div style="background: #FFFFFF; border: 2px solid #D96C48; border-radius: 18px; padding: 22px; box-shadow: 0 12px 30px rgba(217, 108, 72, 0.12); margin-top: 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 12px; margin-bottom: 14px;">
                     <div>
@@ -1688,7 +1699,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
                     </div>
                 </div>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
         # Stage 3: Affirmative Confirmation
         st.markdown(f"#### ⚖️ {t('human_affirmation_heading', lang)}")
@@ -1725,7 +1736,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
     # Stage 4: Case Created Docket
     if st.session_state.get("registered_case_id"):
         cid = st.session_state.registered_case_id
-        st.markdown(f"""
+        render_html(f"""
             <div style="background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 2px solid #059669; border-radius: 18px; padding: 22px; margin-top: 20px; box-shadow: 0 10px 25px rgba(5, 150, 105, 0.12);">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <div>
@@ -1740,7 +1751,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
                     Your complaint has been permanently registered and autonomously routed to the nodal department. Follow the full resolution story below.
                 </p>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
         post_c1, post_c2 = st.columns(2)
         with post_c1:
@@ -1765,16 +1776,16 @@ def render_ai_mission_control_workshop(lang: str = "en"):
     m_head = t("mission_headline", lang)
     m_desc = t("mission_desc", lang)
 
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">⚡ {m_tag}</div>
             <h1 class="hero-page-title">{m_head}</h1>
             <p class="hero-page-desc">{m_desc}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # 5 High-Level Cognitive Blocks
-    st.markdown(f"""
+    render_html(f"""
         <div class="pipeline-flow-banner">
             <div class="pipeline-node">
                 <div class="pipeline-node-icon">👁️</div>
@@ -1806,7 +1817,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
                 <span style="font-size: 0.72rem; color: #64748B;">{t("node_register_sub", lang)}</span>
             </div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Scenario Runner for live pipeline inspection
     st.markdown(f"### ⚙️ {t('pipeline_inspector_title', lang)}")
@@ -1907,7 +1918,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
             raw_desc = COMPLAINT_STAGES.get(s_num, f"Stage {s_num}")
             t_desc = t(raw_desc, lang)
 
-            st.markdown(f"""
+            render_html(f"""
                 <div class="stage-card-workshop">
                     <div class="stage-header-flex">
                         <div>
@@ -1942,7 +1953,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
                         </div>
                     </div>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
 
 
 def render_repair_story(lang: str = "en"):
@@ -1957,38 +1968,37 @@ def render_repair_story(lang: str = "en"):
     Chapter 06 — Resolved
     Includes embedded natural language AI tracking assistant.
     """
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">📖 {t('story_tag', lang)}</div>
             <h1 class="hero-page-title">{t('story_headline', lang)}</h1>
             <p class="hero-page-desc">{t('story_desc', lang)}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Search & Sample Registry Bar
-    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
-    search_id = st.session_state.get("tracking_search_id", "NS-DEMO-A101B202")
-    t_c1, t_c2 = st.columns([0.75, 0.25])
-    with t_c1:
-        entered_id = st.text_input(t("enter_tracking_id", lang), value=search_id, key="txt_track_search")
-    with t_c2:
-        st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-        if st.button(t("btn_find_story", lang), type="primary", use_container_width=True):
-            st.session_state.tracking_search_id = entered_id
-            st.rerun()
+    with st.container(border=True):
+        search_id = st.session_state.get("tracking_search_id", "NS-DEMO-A101B202")
+        t_c1, t_c2 = st.columns([0.75, 0.25])
+        with t_c1:
+            entered_id = st.text_input(t("enter_tracking_id", lang), value=search_id, key="txt_track_search")
+        with t_c2:
+            render_html("<div style='margin-top: 28px;'></div>")
+            if st.button(t("btn_find_story", lang), type="primary", use_container_width=True):
+                st.session_state.tracking_search_id = entered_id
+                st.rerun()
 
-    st.caption(t("quick_demo_stories", lang))
-    p_c1, p_c2, p_c3 = st.columns(3)
-    if p_c1.button(f"🕳️ {t('demo_road_story', lang)}", use_container_width=True):
-        st.session_state.tracking_search_id = "NS-DEMO-A101B202"
-        st.rerun()
-    if p_c2.button(f"🗑️ {t('demo_waste_story', lang)}", use_container_width=True):
-        st.session_state.tracking_search_id = "NS-DEMO-C303D404"
-        st.rerun()
-    if p_c3.button(f"💡 {t('demo_light_story', lang)}", use_container_width=True):
-        st.session_state.tracking_search_id = "NS-DEMO-E505F606"
-        st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.caption(t("quick_demo_stories", lang))
+        p_c1, p_c2, p_c3 = st.columns(3)
+        if p_c1.button(f"🕳️ {t('demo_road_story', lang)}", use_container_width=True):
+            st.session_state.tracking_search_id = "NS-DEMO-A101B202"
+            st.rerun()
+        if p_c2.button(f"🗑️ {t('demo_waste_story', lang)}", use_container_width=True):
+            st.session_state.tracking_search_id = "NS-DEMO-C303D404"
+            st.rerun()
+        if p_c3.button(f"💡 {t('demo_light_story', lang)}", use_container_width=True):
+            st.session_state.tracking_search_id = "NS-DEMO-E505F606"
+            st.rerun()
 
     complaint = database.get_complaint(st.session_state.get("tracking_search_id", entered_id))
     if not complaint:
@@ -2007,7 +2017,7 @@ def render_repair_story(lang: str = "en"):
 
     # Active Incident Story Dossier
     prog_pct = min(100, int(((curr_idx + 1) / len(status_order)) * 100))
-    st.markdown(f"""
+    render_html(f"""
         <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px; margin: 18px 0; box-shadow: 0 10px 28px rgba(36, 59, 99, 0.07);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 12px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
                 <div>
@@ -2031,7 +2041,7 @@ def render_repair_story(lang: str = "en"):
                 </div>
             </div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     chapters = [
         {"num": "01", "name": t("ch1_title", lang), "desc": t("ch1_desc", lang), "stage": 0},
@@ -2048,34 +2058,33 @@ def render_repair_story(lang: str = "en"):
         card_cls = "story-chapter-card" if is_active else "story-chapter-card inactive"
         icon = "✅" if (ch["stage"] < curr_idx or (ch["stage"] == curr_idx and curr_status == "Resolved")) else ("📍" if is_active else "⚪")
 
-        st.markdown(f"""
+        render_html(f"""
             <div class="{card_cls}">
                 <div class="story-chapter-badge">CHAPTER {ch['num']}</div>
                 <div class="story-chapter-title">{icon} {ch['name']}</div>
                 <div style="font-size: 0.88rem; color: #475569;">{ch['desc']}</div>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
     # Integrated AI Tracking Assistant
-    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
-    st.markdown(f"""
-        <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.06);">
+    render_html(f"""
+        <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.06); margin-top: 20px;">
             <div class="hero-tagline-badge">🤖 CITY COMPANION DIALOGUE</div>
             <h3 style="font-family: 'Fraunces', serif; color: #243B63; margin: 4px 0 0 0;">{t('ask_ai_complaint_title', lang)}</h3>
             <p style="font-size: 0.88rem; color: #64748B; margin: 4px 0 14px 0;">{t('ask_ai_complaint_caption', lang)}</p>
-    """, unsafe_allow_html=True)
+        </div>
+    """)
     
     t_chat_query = st.text_input(t("ask_ai_complaint_title", lang), value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}", label_visibility="collapsed")
     if st.button(t("btn_ask_assistant", lang), type="primary", key=f"btn_ask_{complaint['id']}"):
         with st.spinner("🤖 Consulting civic agent and database records..."):
             ans = agent.run_tracking_chat_agent(t_chat_query, db_path=DB_PATH)
-            st.markdown(f"""
+            render_html(f"""
                 <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 18px; margin-top: 14px;">
                     <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}:</strong>
                     <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">{ans.get('reply', '')}</div>
                 </div>
-            """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+            """)
 
 
 def render_civictwin_studio(lang: str = "en"):
@@ -2085,34 +2094,33 @@ def render_civictwin_studio(lang: str = "en"):
     Visual comparison, AI topographical observations, visible repair differences,
     verification report, and official administrative confirmation sign-off.
     """
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">🏛️ {t('twin_tag', lang)}</div>
             <h1 class="hero-page-title">{t('twin_headline', lang)}</h1>
             <p class="hero-page-desc">{t('twin_desc', lang)}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Complaint Selector Bar
-    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
-    all_complaints = database.list_complaints(limit=50)
-    c_ids = [c["id"] for c in all_complaints] if all_complaints else ["NS-DEMO-A101B202"]
-    
-    sel_cid = st.selectbox(t("twin_select_label", lang), options=c_ids, index=0, key="twin_sel_cid")
-    comp_obj = database.get_complaint(sel_cid) or {"issue_type": "Potholes and damaged roads", "status": "In Progress", "locality": "Indiranagar"}
+    with st.container(border=True):
+        all_complaints = database.list_complaints(limit=50)
+        c_ids = [c["id"] for c in all_complaints] if all_complaints else ["NS-DEMO-A101B202"]
+        
+        sel_cid = st.selectbox(t("twin_select_label", lang), options=c_ids, index=0, key="twin_sel_cid")
+        comp_obj = database.get_complaint(sel_cid) or {"issue_type": "Potholes and damaged roads", "status": "In Progress", "locality": "Indiranagar"}
 
-    cat_tr = t(comp_obj.get('issue_type', 'Potholes and damaged roads'), lang)
-    status_tr = t(comp_obj.get('status', 'In Progress'), lang)
-    loc_tr = t(comp_obj.get('locality', 'Local'), lang)
-    city_tr = t(comp_obj.get('city', 'City'), lang)
+        cat_tr = t(comp_obj.get('issue_type', 'Potholes and damaged roads'), lang)
+        status_tr = t(comp_obj.get('status', 'In Progress'), lang)
+        loc_tr = t(comp_obj.get('locality', 'Local'), lang)
+        city_tr = t(comp_obj.get('city', 'City'), lang)
 
-    st.markdown(f"""
-        <div style="font-size: 0.95rem; color: #243B63; margin-top: 10px;">
-            <strong>{t('case_dossier_tag', lang)}:</strong> <code>{sel_cid}</code> • <strong>{t('diagnosis_label', lang)}:</strong> {cat_tr} • <strong>{t('status_label', lang)}:</strong> <span class="dossier-meta-pill dossier-pill-medium">{status_tr.upper()}</span>
-            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">📍 {loc_tr}, {city_tr}</div>
-        </div>
-    """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+        render_html(f"""
+            <div style="font-size: 0.95rem; color: #243B63; margin-top: 10px;">
+                <strong>{t('case_dossier_tag', lang)}:</strong> <code>{sel_cid}</code> • <strong>{t('diagnosis_label', lang)}:</strong> {cat_tr} • <strong>{t('status_label', lang)}:</strong> <span class="dossier-meta-pill dossier-pill-medium">{status_tr.upper()}</span>
+                <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">📍 {loc_tr}, {city_tr}</div>
+            </div>
+        """)
 
     # Side-by-Side Photo Inspection
     sample_dir = Path(__file__).resolve().parent / "data" / "samples"
@@ -2121,31 +2129,27 @@ def render_civictwin_studio(lang: str = "en"):
 
     tw_col1, tw_col2 = st.columns(2)
     with tw_col1:
-        st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
         if before_file.exists():
             st.image(str(before_file), caption=t("before_photo_label", lang), use_column_width=True)
-        st.markdown(f"""
+        render_html(f"""
             <div class="polaroid-badge" style="color: #DC2626;">
                 <span>⚠️ {t('before_photo_label', lang)}</span>
                 <span>ORIGINAL DEFECT</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+        """)
 
     with tw_col2:
-        st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
         if after_file.exists():
             st.image(str(after_file), caption=t("after_photo_label", lang), use_column_width=True)
-        st.markdown(f"""
+        render_html(f"""
             <div class="polaroid-badge" style="color: #059669;">
                 <span>✅ {t('after_photo_label', lang)}</span>
                 <span>COMPLETION EVIDENCE</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+        """)
 
     if before_file.exists() and after_file.exists():
-        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
+        render_html("<div style='margin-top: 14px;'></div>")
         if st.button(t("btn_run_twin_studio", lang), type="primary", use_container_width=True, key="btn_exec_twin_studio"):
             with st.spinner("🤖 Multimodal Vision inspecting topographical restoration & quality delta..."):
                 with open(before_file, "rb") as f1, open(after_file, "rb") as f2:
@@ -2161,7 +2165,7 @@ def render_civictwin_studio(lang: str = "en"):
         status_badge = t('verified_badge', lang) if v_res.get('resolved') else t('needs_correction_badge', lang)
 
         st.markdown("---")
-        st.markdown(f"""
+        render_html(f"""
             <div class="civictwin-compare-frame">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div>
@@ -2192,7 +2196,7 @@ def render_civictwin_studio(lang: str = "en"):
                     </div>
                 </div>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
         # Officer Confirmation Sign-Off
         st.markdown(f"#### ✍️ {t('admin_signoff_title', lang)}")
@@ -2225,20 +2229,19 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     Select neighborhood directly, view reported problems, active issues, resolved complaints,
     and local civic memory stories.
     """
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">🏘️ {t('pulse_tag', lang)}</div>
             <h1 class="hero-page-title">{t('pulse_headline', lang)}</h1>
             <p class="hero-page-desc">{t('pulse_desc', lang)}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Neighborhood Selection Bar
-    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
-    localities = ["Indiranagar (Bengaluru)", "Bandra West (Mumbai)", "Connaught Place (Delhi)", "Satellite (Ahmedabad)", "Kothrud (Pune)"]
-    sel_loc = st.selectbox(t("select_neighborhood_label", lang), options=localities, index=0, key="pulse_sel_neighborhood")
-    loc_clean = sel_loc.split(" (")[0]
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        localities = ["Indiranagar (Bengaluru)", "Bandra West (Mumbai)", "Connaught Place (Delhi)", "Satellite (Ahmedabad)", "Kothrud (Pune)"]
+        sel_loc = st.selectbox(t("select_neighborhood_label", lang), options=localities, index=0, key="pulse_sel_neighborhood")
+        loc_clean = sel_loc.split(" (")[0]
 
     stats = database.get_neighborhood_pulse_stats()
     metrics = stats.get("metrics", {})
@@ -2248,7 +2251,7 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     rate = metrics.get("resolution_rate", 75.0)
 
     # Telemetry KPI Grid
-    st.markdown(f"""
+    render_html(f"""
         <div class="pulse-stat-grid">
             <div class="pulse-stat-box" style="border-top: 4px solid var(--terracotta);">
                 <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">📋 {t('total_reports', lang)}</span>
@@ -2271,11 +2274,11 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
                 <span style="font-size: 0.76rem; color: #64748B; font-weight: 600;">{t('overall_velocity', lang)}</span>
             </div>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Civic Intelligence Synthesis Narrative
     summary = stats.get("ai_neighborhood_summary", "Telemetry loaded.")
-    st.markdown(f"""
+    render_html(f"""
         <div style="background: linear-gradient(135deg, #FFFDF8 0%, #FAF3E8 100%); border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.05); position: relative;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
                 <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 800; color: #D96C48; text-transform: uppercase; letter-spacing: 0.08em;">
@@ -2285,7 +2288,7 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
             </div>
             <p style="font-size: 0.96rem; color: #243B63; margin: 0; line-height: 1.6; font-style: italic;">"{summary}"</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Filtered Neighborhood Cases
     all_complaints = database.list_complaints(limit=50)
@@ -2296,7 +2299,7 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     for c in cases_to_show:
         c_col1, c_col2 = st.columns([0.82, 0.18])
         with c_col1:
-            st.markdown(f"""
+            render_html(f"""
                 <div style="background: #FFFFFF; border: 1.5px solid #E8DAC6; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(36, 59, 99, 0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <strong style="color: #243B63; font-size: 0.98rem;">{c['id']}</strong>
@@ -2307,9 +2310,9 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
                     </div>
                     <div style="font-size: 0.84rem; color: #64748B; margin-top: 4px;">{c['description']}</div>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
         with c_col2:
-            st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
+            render_html("<div style='margin-top: 8px;'></div>")
             if st.button(t("btn_inspect_dossier", lang), key=f"btn_p_view_{c['id']}", use_container_width=True):
                 st.session_state.selected_case_id = c["id"]
                 st.rerun()
@@ -2322,13 +2325,13 @@ def render_civic_operations_studio(lang: str = "en"):
     Features complaint management, status updates, department assignments,
     repair verification, and chronological audit trail inspection.
     """
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">🛡️ {t('admin_tag', lang)}</div>
             <h1 class="hero-page-title">{t('admin_headline', lang)}</h1>
             <p class="hero-page-desc">{t('admin_desc', lang)}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     all_complaints = database.list_complaints(limit=100)
     if not all_complaints:
@@ -2336,13 +2339,12 @@ def render_civic_operations_studio(lang: str = "en"):
         return
 
     # Filter controls in Storybook Control Bar
-    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
-    f_col1, f_col2 = st.columns([0.6, 0.4])
-    with f_col1:
-        status_filter = st.selectbox(t("filter_status_label", lang), options=["All"] + VALID_STATUSES, key="admin_filter_status")
-    with f_col2:
-        search_query = st.text_input(t("search_id_locality", lang), value="", key="admin_search_query")
-    st.markdown('</div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        f_col1, f_col2 = st.columns([0.6, 0.4])
+        with f_col1:
+            status_filter = st.selectbox(t("filter_status_label", lang), options=["All"] + VALID_STATUSES, key="admin_filter_status")
+        with f_col2:
+            search_query = st.text_input(t("search_id_locality", lang), value="", key="admin_search_query")
 
     filtered = all_complaints
     if status_filter != "All":
@@ -2364,7 +2366,7 @@ def render_civic_operations_studio(lang: str = "en"):
         c_city = t(complaint.get('city', ''), lang)
         c_dept = t(complaint.get('department', ''), lang)
 
-        st.markdown(f"""
+        render_html(f"""
             <div class="admin-op-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 12px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
                     <div>
@@ -2380,7 +2382,7 @@ def render_civic_operations_studio(lang: str = "en"):
                     <em>"{complaint.get('description')}"</em>
                 </div>
             </div>
-        """, unsafe_allow_html=True)
+        """)
 
         ctrl_col1, ctrl_col2 = st.columns(2)
         with ctrl_col1:
@@ -2412,13 +2414,13 @@ def render_ai_companion_drawer(lang: str = "en"):
     Renders the compact AI City Companion overlay.
     Lives cleanly inside the command capsule context without taking over the screen.
     """
-    st.markdown(f"""
+    render_html(f"""
         <div class="storybook-page-hero">
             <div class="hero-tagline-badge">🤖 {t('companion_tag', lang)}</div>
             <h1 class="hero-page-title">{t('companion_headline', lang)}</h1>
             <p class="hero-page-desc">{t('companion_desc', lang)}</p>
         </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Prompt suggestions
     st.caption(t("prompt_suggestions_label", lang))
@@ -2441,14 +2443,14 @@ def render_ai_companion_drawer(lang: str = "en"):
         if user_query:
             with st.spinner("🤖 Consulting civic agent and SQLite database..."):
                 reply = agent.run_tracking_chat_agent(user_query, db_path=DB_PATH)
-                st.markdown(f"""
+                render_html(f"""
                     <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.08); margin-top: 14px;">
                         <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}:</strong>
                         <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">
                             {reply.get('reply', '')}
                         </div>
                     </div>
-                """, unsafe_allow_html=True)
+                """)
 
 
 def render_streetverse():
@@ -2535,7 +2537,7 @@ def render_streetverse():
     # Main Street Scene (Default View)
     elif active_view == "street":
         # Render the handcrafted 2.5D SVG Street Scene
-        st.markdown(render_streetverse_svg(category_counts, active_states={"road": "alert" if category_counts["Potholes and damaged roads"] > 0 else "smooth"}, lang=st.session_state.lang), unsafe_allow_html=True)
+        render_html(render_streetverse_svg(category_counts, active_states={"road": "alert" if category_counts["Potholes and damaged roads"] > 0 else "smooth"}, lang=st.session_state.lang))
 
         lang = st.session_state.lang
         st.markdown(f"### 🏘️ {t('street_signals_title', lang)}")
@@ -2543,52 +2545,52 @@ def render_streetverse():
 
         h_col1, h_col2, h_col3, h_col4 = st.columns(4)
         with h_col1:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🕳️</span>
                     <strong style="color: #D96C48; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_road_title', lang)}</strong>
                     <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Potholes and damaged roads']} {t('active_reports_sub', lang)}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
             if st.button(t("hotspot_road_btn", lang), key="btn_h_road", use_container_width=True):
                 st.session_state.selected_hotspot = "road"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
 
         with h_col2:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">💡</span>
                     <strong style="color: #F4BB52; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_light_title', lang)}</strong>
                     <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Broken streetlights']} {t('lighting_incidents_sub', lang)}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
             if st.button(t("hotspot_light_btn", lang), key="btn_h_light", use_container_width=True):
                 st.session_state.selected_hotspot = "streetlight"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
 
         with h_col3:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🗑️</span>
                     <strong style="color: #83A98A; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_waste_title', lang)}</strong>
                     <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Overflowing garbage']} {t('waste_points_sub', lang)}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
             if st.button(t("hotspot_waste_btn", lang), key="btn_h_waste", use_container_width=True):
                 st.session_state.selected_hotspot = "garbage"
                 st.session_state.street_active_view = "hotspot"
                 st.rerun()
 
         with h_col4:
-            st.markdown(f"""
+            render_html(f"""
                 <div class="hotspot-card-badge">
                     <span style="font-size: 1.4rem;">🌊</span>
                     <strong style="color: #243B63; font-size: 0.95rem; display: block; margin-top: 4px;">{t('hotspot_drain_title', lang)}</strong>
                     <span style="font-size: 0.8rem; color: #64748B;">{category_counts['Waterlogging and drainage issues']} {t('drainage_issues_sub', lang)}</span>
                 </div>
-            """, unsafe_allow_html=True)
+            """)
             if st.button(t("hotspot_drain_btn", lang), key="btn_h_drain", use_container_width=True):
                 st.session_state.selected_hotspot = "drainage"
                 st.session_state.street_active_view = "hotspot"
@@ -2620,7 +2622,7 @@ def render_streetverse():
         render_ai_companion_drawer(lang=st.session_state.lang)
 
     # Floating Command Capsule (Navigation Bar)
-    st.markdown("<div style='margin-top: 2rem;'></div>", unsafe_allow_html=True)
+    render_html("<div style='margin-top: 2rem;'></div>")
     render_floating_capsule(active_view, lang=st.session_state.lang)
 
     # Floating Real-Data Activity Indicator
