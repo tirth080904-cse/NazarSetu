@@ -30,6 +30,7 @@ import tools
 import vision
 import agent
 import components
+import streetverse
 from i18n import t, TRANSLATIONS
 
 
@@ -287,4 +288,46 @@ def test_theme_and_html_rendering_sanitization(monkeypatch):
         assert not line.startswith("\t"), f"Tabbed line found: {line}"
     assert '<div class="intel-grid">' in rendered
     assert '<div class="intel-item">Item</div>' in rendered
+
+
+# 9. Test NAZARSETU — STREETVERSE Architecture & SVG Hotspots
+def test_streetverse_engine():
+    # 1. Verify Art Direction CSS tokens
+    css = streetverse.get_streetverse_css()
+    assert "#F4E7D3" in css  # Warm Sand
+    assert "#D96C48" in css  # Terracotta
+    assert "#243B63" in css  # Indigo Ink
+    assert "#F4BB52" in css  # Mango Yellow
+    assert "#83A98A" in css  # Sage Green
+    assert "Fraunces" in css  # Expressive typography
+
+    # 2. Verify 2.5D SVG Scene with state-aware hotspots and live counts
+    mock_counts = {
+        "Potholes and damaged roads": 5,
+        "Broken streetlights": 2,
+        "Overflowing garbage": 4,
+        "Waterlogging and drainage issues": 1,
+    }
+    svg_output = streetverse.render_streetverse_svg(mock_counts, active_states={"road": "alert"})
+    
+    assert "<svg" in svg_output
+    assert "viewBox=\"0 0 1200 640\"" in svg_output
+    assert "hotspot-road" in svg_output
+    assert "hotspot-streetlight" in svg_output
+    assert "hotspot-garbage" in svg_output
+    assert "hotspot-drainage" in svg_output
+    
+    # Verify live counts appear inside the rendered SVG badges
+    assert "5 Active Signal" in svg_output
+    assert "2 Incident" in svg_output
+    assert "4 Active Point" in svg_output
+    assert "1 Logged Runoff" in svg_output
+
+    # 3. Verify Hotspot Metadata coverage of all 4 supported categories
+    for key, meta in streetverse.HOTSPOT_METADATA.items():
+        assert meta["category"] in SUPPORTED_CATEGORIES
+        assert len(meta["department"]) > 5
+        assert len(meta["default_city"]) > 2
+        assert len(meta["default_locality"]) > 2
+
 

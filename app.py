@@ -48,6 +48,19 @@ st.set_page_config(
 # Initialize database schema and demo records
 database.seed_demo_complaints()
 
+# Check query param for view mode
+if "view" in st.query_params:
+    st.session_state.view_mode = st.query_params.get("view")
+
+if "view_mode" not in st.session_state:
+    st.session_state.view_mode = "streetverse"
+
+# If in Streetverse mode (default), launch the illustrated miniature Indian neighborhood
+if st.session_state.view_mode != "classic":
+    import streetverse
+    streetverse.render_streetverse()
+    st.stop()
+
 # Initialize session state variables
 if "lang" not in st.session_state:
     st.session_state.lang = "en"
@@ -166,11 +179,15 @@ with st.sidebar:
     st.markdown("---")
     st.caption("NazarSetu v2.0 • Civic Intelligence Command Center")
 
-# Quick Top Action Bar: Theme Mode Switcher
-top_c1, top_c2 = st.columns([0.82, 0.18])
+# Quick Top Action Bar: Switch to Streetverse Experience & Theme Switcher
+top_c1, top_c2, top_c3 = st.columns([0.62, 0.23, 0.15])
 with top_c2:
+    if st.button("🎨 Streetverse Experience", use_container_width=True, key="btn_classic_to_streetverse"):
+        st.session_state.view_mode = "streetverse"
+        st.rerun()
+with top_c3:
     cur_theme = st.session_state.get("theme", "light")
-    toggle_label = "🌙 Dark Mode" if cur_theme == "light" else "☀️ Light Mode"
+    toggle_label = "🌙 Dark" if cur_theme == "light" else "☀️ Light"
     if st.button(toggle_label, use_container_width=True, key="top_quick_theme_toggle"):
         st.session_state.theme = "dark" if cur_theme == "light" else "light"
         st.rerun()

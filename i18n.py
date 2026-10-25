@@ -170,6 +170,38 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "hi": "🌙 डार्क मोड",
         "gu": "🌙 ડાર્ક મોડ",
     },
+
+    # Streetverse
+    "streetverse_tagline": {
+        "en": "Every Street Has a Story. Let's Change the Ending.",
+        "hi": "हर गली की एक कहानी है। आइए इसका अंत बदलें।",
+        "gu": "દરેક શેરીની એક વાર્તા છે. ચાલો તેનો અંત બદલીએ.",
+    },
+    "capsule_explore": {
+        "en": "🗺️ Explore",
+        "hi": "🗺️ अन्वेषण",
+        "gu": "🗺️ અન્વેષણ",
+    },
+    "capsule_report": {
+        "en": "📸 Report",
+        "hi": "📸 रिपोर्ट करें",
+        "gu": "📸 ફરિયાદ કરો",
+    },
+    "capsule_track": {
+        "en": "🔍 Track",
+        "hi": "🔍 ट्रैक करें",
+        "gu": "🔍 ટ્રેક કરો",
+    },
+    "capsule_ask_ai": {
+        "en": "🤖 Ask AI",
+        "hi": "🤖 एआई साथी",
+        "gu": "🤖 AI સાથી",
+    },
+    "capsule_stories": {
+        "en": "📖 Stories",
+        "hi": "📖 इलाका गाथा",
+        "gu": "📖 વિસ્તાર વાર્તાઓ",
+    },
 }
 
 
