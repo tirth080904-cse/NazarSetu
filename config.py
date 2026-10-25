@@ -70,34 +70,91 @@ CATEGORY_METADATA = {
     },
 }
 
-# Complaint Statuses
+# Complaint Lifecycle Statuses (5-Stage Journey)
 STATUS_PENDING = "Pending"
+STATUS_REPORTED = "Reported"
+STATUS_ASSIGNED = "Assigned"
 STATUS_IN_PROGRESS = "In Progress"
+STATUS_AWAITING_VERIFICATION = "Awaiting Verification"
 STATUS_RESOLVED = "Resolved"
 
-VALID_STATUSES = [STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_RESOLVED]
+# Full list of valid database statuses (maintains backward compatibility with tests)
+VALID_STATUSES = [
+    STATUS_PENDING,
+    STATUS_REPORTED,
+    STATUS_ASSIGNED,
+    STATUS_IN_PROGRESS,
+    STATUS_AWAITING_VERIFICATION,
+    STATUS_RESOLVED,
+]
 
-# Documented Priority Heuristic Rules
+# Canonical 5-Stage Visual Lifecycle Sequence
+COMPLAINT_LIFECYCLE_STAGES = [
+    STATUS_REPORTED,
+    STATUS_ASSIGNED,
+    STATUS_IN_PROGRESS,
+    STATUS_AWAITING_VERIFICATION,
+    STATUS_RESOLVED,
+]
+COMPLAINT_STAGES = COMPLAINT_LIFECYCLE_STAGES
+
+# Priority and Severity Levels
+SEVERITY_LEVELS = ["Low", "Medium", "High", "Critical"]
+VALID_PRIORITIES = ["Low", "Medium", "High", "Critical"]
+
+# Documented Priority Heuristic Rules with Critical tier
 PRIORITY_RULES = {
     "Potholes and damaged roads": {
+        "Critical": "Active cave-in or crater depth > 20cm spanning arterial corridor, imminent high-casualty hazard.",
         "High": "Severe crater depth > 10cm, spans active traffic lane, or poses immediate vehicular/two-wheeler hazard.",
         "Medium": "Moderate depression or broken asphalt creating traffic slowdowns.",
         "Low": "Surface gravel wear or minor road chipping without structural blockage.",
     },
     "Overflowing garbage": {
-        "High": "Massive waste spill blocking sidewalk/roadway, burning trash, or posing severe biohazard/pest infestation.",
+        "Critical": "Hazardous toxic/chemical dump, open burning waste emitting noxious smoke near sensitive zones.",
+        "High": "Massive waste spill blocking sidewalk/roadway, severe biohazard, or active pest infestation.",
         "Medium": "Overfilled dumpster container with waste spilling into immediate perimeter.",
         "Low": "Isolated scattered dry waste or single uncollected bin.",
     },
     "Broken streetlights": {
-        "High": "Exposed live wires, fallen lighting pole, or total junction blackout on high-speed road.",
+        "Critical": "Exposed high-voltage live wires sparking, or fallen lighting pole blocking traffic carriageway.",
+        "High": "Complete junction blackout on high-speed road or dark blind curve.",
         "Medium": "Complete unlit street lamp on pedestrian thoroughfare or residential street.",
         "Low": "Flickering bulb or timer desynchronization (lamp active during daytime).",
     },
     "Waterlogging and drainage issues": {
+        "Critical": "Submerged highway underpass with rising water, breached electrical utility box, or flash flood zone.",
         "High": "Deep standing water (> 1 foot) stalling vehicles or breaching residential/commercial thresholds.",
         "Medium": "Clogged storm drain or persistent curb-side pooling impeding pedestrian movement.",
         "Low": "Slow-draining shallow puddle during normal monsoon conditions.",
+    },
+}
+
+# Real-world Citizen Impact Heuristics
+CITIZEN_IMPACT_PRESETS = {
+    "Potholes and damaged roads": {
+        "Critical": "Severe vehicle overturn hazard, fatal two-wheeler skidding risk, arterial transit gridlock.",
+        "High": "Immediate two-wheeler spill hazard, vehicular rim/suspension damage, sudden braking collisions.",
+        "Medium": "Traffic flow deceleration, localized congestion, minor vehicular jarring.",
+        "Low": "Minor ride discomfort, loose pebble projectile hazard for pedestrians.",
+    },
+    "Overflowing garbage": {
+        "Critical": "Severe respiratory toxicity, uncontrolled fire risk, medical/biohazard public exposure.",
+        "High": "Vector-borne disease breeding (dengue/cholera), pedestrian forced onto vehicle lanes, foul odor.",
+        "Medium": "Unpleasant olfactory environment, sidewalk littering, stray animal congregation.",
+        "Low": "Aesthetic blight, localized scattered dry litter.",
+    },
+    "Broken streetlights": {
+        "Critical": "Direct electrocution hazard, high-speed vehicle impact with unlit fallen infrastructure.",
+        "High": "Compromised nocturnal pedestrian safety, heightened blind-spot crash vulnerability.",
+        "Medium": "Pedestrian hesitation after dusk, reduced perimeter visibility for residents.",
+        "Low": "Minor illumination shortfall, aesthetic irregularity.",
+    },
+    "Waterlogging and drainage issues": {
+        "Critical": "Vehicle stall and passenger entrapment risk, sewage backflow contamination in homes.",
+        "High": "Engine water ingestion hazard, hidden pothole submergence trap, pedestrian displacement.",
+        "Medium": "Pedestrian foot-traffic detour, curbside accumulation, curb splashing.",
+        "Low": "Minor puddle jumping requirement, damp pavement.",
     },
 }
 

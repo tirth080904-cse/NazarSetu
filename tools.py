@@ -155,9 +155,11 @@ def check_duplicate(
             db_path=db_path
         )
         if dup:
+            m_type = "exact_image_hash" if dup.get("image_hash") == image_hash else "category_locality_cluster"
             return {
                 "status": "duplicate_found",
                 "is_duplicate": True,
+                "match_type": m_type,
                 "existing_complaint_id": dup["id"],
                 "existing_status": dup["status"],
                 "existing_created_at": dup["created_at"],
@@ -298,6 +300,74 @@ def get_complaint_timeline(complaint_id: str, db_path: Path = DB_PATH) -> Dict[s
     }
 
 
+# Tool 7: query_neighborhood_analytics
+def query_neighborhood_analytics(
+    locality: Optional[str] = None,
+    issue_type: Optional[str] = None,
+    db_path: Path = DB_PATH
+) -> Dict[str, Any]:
+    """Retrieve grounded statistical aggregates for Neighborhood Pulse strictly from database records."""
+    try:
+        stats = database.get_neighborhood_pulse_stats(locality_filter=locality, issue_filter=issue_type, db_path=db_path)
+        return {
+            "status": "success",
+            "total_complaints": stats["total_complaints"],
+            "top_locality": stats["top_locality"],
+            "top_issue": stats["top_issue"],
+            "high_critical_count": stats["high_critical_count"],
+            "avg_resolution_hours": stats["avg_resolution_hours"],
+            "summary": stats["ai_neighborhood_summary"],
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+# Tool 8: search_complaints_by_query
+def search_complaints_by_query(
+    query_text: Optional[str] = None,
+    status: Optional[str] = None,
+    limit: int = 5,
+    db_path: Path = DB_PATH
+) -> Dict[str, Any]:
+    """Search registered complaints for conversational inquiries."""
+    try:
+        results = database.search_complaints(query_text=query_text, status=status, limit=limit, db_path=db_path)
+        return {
+            "status": "success",
+            "count": len(results),
+            "complaints": [
+                {
+                    "id": r["id"],
+                    "issue_type": r["issue_type"],
+                    "locality": r["locality"],
+                    "status": r["status"],
+                    "priority": r["priority"],
+                    "department": r["department"],
+                    "created_at": r["created_at"],
+                }
+                for r in results
+            ]
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e), "complaints": []}
+
+
+# Tool 9: explain_priority_rationale
+def explain_priority_rationale(
+    issue_type: str,
+    priority: str = "High"
+) -> Dict[str, Any]:
+    """Return transparent rule-based explanation of priority selection."""
+    rules_for_cat = PRIORITY_RULES.get(issue_type, {})
+    rationale = rules_for_cat.get(priority, "Standard municipal assessment guidelines applied.")
+    return {
+        "status": "success",
+        "issue_type": issue_type,
+        "priority": priority,
+        "rationale": rationale,
+    }
+
+
 # OpenAI Function-Calling Tool Definitions
 OPENAI_TOOLS = [
     {
@@ -396,6 +466,49 @@ OPENAI_TOOLS = [
                 "required": ["complaint_id"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "query_neighborhood_analytics",
+            "description": "Retrieve grounded statistics on complaints, top issues, and resolution metrics strictly from SQLite.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "locality": {"type": "string", "description": "Optional locality filter."},
+                    "issue_type": {"type": "string", "description": "Optional issue type filter."}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_complaints_by_query",
+            "description": "Search for complaints by keyword or status.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query_text": {"type": "string", "description": "Keyword to search."},
+                    "status": {"type": "string", "description": "Filter by status."}
+                }
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "explain_priority_rationale",
+            "description": "Explain the safety heuristic rules why an issue was classified with a specific priority.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "issue_type": {"type": "string", "description": "Category of civic issue."},
+                    "priority": {"type": "string", "description": "Priority tier (Low, Medium, High, Critical)."}
+                },
+                "required": ["issue_type"]
+            }
+        }
     }
 ]
 
@@ -435,6 +548,23 @@ def execute_tool_call(tool_name: str, arguments: Dict[str, Any], db_path: Path =
         return get_complaint_timeline(
             complaint_id=arguments.get("complaint_id", ""),
             db_path=db_path
+        )
+    elif tool_name == "query_neighborhood_analytics":
+        return query_neighborhood_analytics(
+            locality=arguments.get("locality"),
+            issue_type=arguments.get("issue_type"),
+            db_path=db_path
+        )
+    elif tool_name == "search_complaints_by_query":
+        return search_complaints_by_query(
+            query_text=arguments.get("query_text"),
+            status=arguments.get("status"),
+            db_path=db_path
+        )
+    elif tool_name == "explain_priority_rationale":
+        return explain_priority_rationale(
+            issue_type=arguments.get("issue_type", "Potholes and damaged roads"),
+            priority=arguments.get("priority", "High")
         )
     else:
         return {

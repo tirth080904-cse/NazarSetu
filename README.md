@@ -11,15 +11,15 @@
 👉 **[Launch NazarSetu Live Web App](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/)**  
 *(Direct Cloud URL: [https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/))*
 
-**Category:** Agentic AI / Smart Cities / Civic Technology  
-**Edition:** Hackathon MVP  
-**Tech Stack:** Python 3.11+, Streamlit, OpenAI Multimodal API & Function Calling, SQLite, Pillow, Pandas
+**Category:** Agentic AI / Smart Cities / Civic Intelligence & Autonomous Action  
+**Edition:** Autonomous Civic Intelligence Platform (v2.0 Hackathon Edition)  
+**Tech Stack:** Python 3.11+, Streamlit, OpenAI Multimodal API & Function Calling, SQLite, Pillow, Pandas, Altair, Zero-Dependency i18n
 
 ---
 
 ## 🌟 Overview
 
-**NazarSetu** bridges the critical gap between citizen awareness and civic execution. Rather than simply describing a photograph, an autonomous AI agent inspects the visual evidence, executes real Python software tools to identify the responsible municipal ward, selects the operational department, runs a smart duplicate check against existing reports, securely registers confirmed complaints with persistent SQLite audit trails, and tracks resolution progress through conversational inquiries.
+**NazarSetu (नज़रसेतु)** transforms ordinary civic complaint systems into an **autonomous civic intelligence loop**. Rather than functioning as a passive drop-box, NazarSetu actively diagnoses physical evidence, evaluates citizen safety impact, coordinates with municipal ward registers, executes genuine Python tool calls across a 10-stage timeline, and visually verifies physical repairs before closing tickets with human-in-the-loop governance.
 
 ---
 
@@ -27,20 +27,22 @@
 
 ```
 nazarsetu/
-├── app.py                  # Main Streamlit Web Application (4 Product Views)
+├── app.py                  # Main Streamlit Web Application (7 Product Views)
 ├── agent.py                # Autonomous Agent Loop, Tool Calling & Action Trail
-├── vision.py               # AI Multimodal Vision & Resilient Heuristic Analyzer
-├── tools.py                # Agent Tools (ward lookup, routing, duplicate check, status)
-├── database.py             # SQLite Persistence with Audit Event Timelines
-├── config.py               # Settings, Heuristics, Priority Rules & Constants
-├── components.py           # Indian Civic-Tech Design System, Issue DNA & Trackers
-├── generate_samples.py     # Script to generate 1-click hackathon test images
+├── vision.py               # Multimodal Civic Intelligence Engine & CivicTwin Analyzer
+├── tools.py                # 9 Autonomous Agent Tools (ward lookup, routing, duplicate check, pulse stats)
+├── database.py             # SQLite Persistence, CivicTwin Verifications & Event Timelines
+├── config.py               # Heuristics, Priority Rules, Citizen Impact Presets & Constants
+├── components.py           # Smart City Command Center UI & SaaS Design System
+├── i18n.py                 # Multilingual Accessibility Engine (English, Hindi, Gujarati)
 ├── data/
 │   ├── demo_wards.csv      # Fictional Ward Jurisdiction Dataset
 │   ├── nazarsetu.db        # SQLite Persistent Storage
-│   └── samples/            # 1-Click Demo Evidence Photographs
+│   └── samples/            # Pre-configured 1-Click Demo Scenarios (Pothole, Garbage, etc.)
 ├── tests/
-│   └── test_core.py        # 12 Core Automated Unit Tests
+│   ├── test_core.py        # 14 Core Automated Unit Tests
+│   ├── test_demo_flow.py   # Full End-to-End Autonomous Lifecycle Test
+│   └── test_enhancements.py# 7 Comprehensive Tests for New Intelligence Features
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
@@ -49,47 +51,53 @@ nazarsetu/
 
 ---
 
-## 🚀 Key Features
+## 🚀 Key Innovation Features
 
-### 1. Citizen Reporting Studio
-- **Drag-and-Drop Upload & One-Click Demos:** Upload any real photo or test with 1-click samples (Pothole, Garbage, Streetlight, Waterlogging, Non-Civic).
-- **Vision AI Inspection:** Identifies civic problems and rejects non-civic photos (e.g. pets, selfies) with clear explanations.
-- **Citizen Review & Correction:** Citizens retain full agency to adjust classifications, severity, or descriptions.
-- **Explicit Confirmation Requirement:** Submissions are never registered without affirmative citizen confirmation.
+### 1. Civic Intelligence Engine
+When a photograph is uploaded, the multimodal AI performs in-depth civic diagnostic reasoning:
+- **Multimodal Severity Rating:** Low, Medium, High, and Critical tiers based on municipal engineering standards.
+- **Projected Citizen Impact:** Evaluates dangers to pedestrians, two-wheelers, school children, and elderly residents.
+- **Transparent Priority Decision Rationale:** Explains exactly why an issue received its priority based on documented safety heuristics.
+- **Recommended Action Plan & SLA:** Specific technical guidance and target turnaround hours for the responsible department.
 
-### 2. Issue DNA (Signature Feature)
-A structured, visually striking card summarizing:
-- **Problem Identified** with category icon
-- **Visible Evidence** (specific structural/environmental findings)
-- **Suggested Priority** (High/Medium/Low based on documented safety rules)
-- **Assigned Department** & **Location Jurisdiction**
-- **Recommended Action** & **Uncertainty Flags**
+### 2. AI Civic Mission Control (10-Stage Pipeline)
+A verifiable command center timeline tracking genuine model tool executions:
+- **Stage 1:** Evidence Ingestion & Cryptographic SHA-256 Hashing
+- **Stage 2:** Multimodal Civic Issue Classification
+- **Stage 3:** Severity & Citizen Impact Evaluation
+- **Stage 4:** Geographic Coordinate & Locality Verification
+- **Stage 5:** Municipal Ward & Jurisdiction Lookup
+- **Stage 6:** Operational Department Selection & Routing
+- **Stage 7:** Smart Duplicate Shield Search
+- **Stage 8:** Human-in-the-Loop Affirmative Authorization
+- **Stage 9:** Persistent Database Registration (`NS-DEMO-XXXXXXXX`)
+- **Stage 10:** Real-Time Lifecycle Tracking Activated
 
-### 3. Autonomous Action Engine & Tool Calling
-The agent executes real Python tools:
-- `analyze_issue(image)`: Multimodal classification.
-- `select_department(issue_type)`: Routes to Roads, Waste Management, Lighting, or Drainage.
-- `find_responsible_ward(city, locality)`: Looks up local jurisdictional dataset.
-- `check_duplicate(issue_type, locality, image_hash)`: SHA-256 duplicate guard.
-- `register_complaint(confirmed_details)`: Generates `NS-DEMO-XXXXXXXX` ID and records initial event.
-- `get_complaint_status(complaint_id)`: Live database lookup.
-- `get_complaint_timeline(complaint_id)`: Chronological audit history.
+### 3. CivicTwin (Before & After Resolution Verification)
+Eliminates false "resolved" claims:
+- Inspects post-repair evidence photos side-by-side with initial complaint photos.
+- Computes AI Verification Score, detection delta, and a 3-point quality assurance checklist (hazard cleared, surface leveled, debris removed).
+- **Strict Human-in-the-Loop Governance:** AI verification is advisory; affirmative officer approval is mandatory before any ticket is formally closed.
 
-### 4. Agent Action Trail
-A vertical timeline progress tracker generated from **actual execution events**, never fabricated reasoning. Shows checkmarks, tool names, parameters, explanations, and expandable JSON execution payloads.
+### 4. Neighborhood Pulse (Grounded Municipal Telemetry)
+- Real-time community health dashboard calculated **strictly from SQLite database records** (zero hallucinated statistics).
+- 5 Live KPI cards: Total Filed, Active Pending, In Progress, Awaiting Verification, and Resolution Rate %.
+- Interactive distribution charts by category and locality.
+- Grounded AI Executive Summary summarizing verified neighborhood metrics.
 
-### 5. Smart Duplicate Guard
-Computes a SHA-256 hash of the evidence photo and queries unresolved complaints in the same locality. If a potential duplicate is detected, alerts the citizen with the existing ID while giving them the choice to track the original or file a separate incident.
+### 5. Smart Duplicate Shield
+- Matches image SHA-256 hashes and category/locality clusters against active complaints.
+- Alerts citizens with existing Tracking IDs and lets them either link to the open ticket or file an independent incident.
 
-### 6. Conversational Complaint Tracking Assistant
-- Interactive chatbot allowing citizens to query: *"What is the status of NS-DEMO-A101B202?"* or *"Check my pothole report"*.
-- Agent invokes `get_complaint_status` and `get_complaint_timeline` to return verifiable, real-time facts.
-- Displays a 3-Stage Visual Status Tracker (`Pending` ➔ `In Progress` ➔ `Resolved`).
+### 6. 5-Stage Complaint Journey
+Full visual lifecycle progression:
+`Reported` ➔ `Assigned` ➔ `In Progress` ➔ `Awaiting Verification` ➔ `Resolved`
 
-### 7. Demo Administration Command Center
-- Real-time counters: Total, Pending, In Progress, Resolved.
-- Filterable register by issue category, department, and status.
-- Interactive status dispatch controls: Municipal officers can update status with timestamped operational notes. Changes reflect immediately in the AI tracking assistant!
+### 7. Multilingual Accessibility Engine
+Native, high-performance dictionary translation engine with zero external dependencies supporting:
+- **English** (`en`)
+- **हिंदी / Hindi** (`hi`)
+- **ગુજરાતી / Gujarati** (`gu`)
 
 ---
 
