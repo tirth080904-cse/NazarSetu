@@ -2,6 +2,15 @@
 > **See the Problem. Bridge to Action.**  
 > *From a single photograph to meaningful civic action — powered by autonomous AI agents.*
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/tirth080904-cse/nazarsetu/main/app.py)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+### 🌐 Live Cloud Web Application:
+**Instant Access from Any Browser (Mobile, Desktop, Tablet):**
+👉 **[Launch NazarSetu Live Web App](https://share.streamlit.io/tirth080904-cse/nazarsetu/main/app.py)**  
+*(Permanent Cloud URL: [https://nazarsetu.streamlit.app](https://nazarsetu.streamlit.app))*
+
 **Category:** Agentic AI / Smart Cities / Civic Technology  
 **Edition:** Hackathon MVP  
 **Tech Stack:** Python 3.11+, Streamlit, OpenAI Multimodal API & Function Calling, SQLite, Pillow, Pandas
