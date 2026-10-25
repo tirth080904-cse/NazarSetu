@@ -22,6 +22,29 @@ import database
 # Cache for demo ward mapping
 _WARDE_CACHE: Optional[List[Dict[str, str]]] = None
 
+SUPPORTED_LOCALITIES: Dict[str, List[str]] = {
+    "Bengaluru": [
+        "Indiranagar", "Koramangala", "Whitefield", "HSR Layout",
+        "Jayanagar", "Malleshwaram", "Bellandur", "Electronic City"
+    ],
+    "Mumbai": [
+        "Bandra West", "Andheri East", "Dadar", "Powai",
+        "Colaba", "Malad", "Borivali", "Kurla"
+    ],
+    "Delhi": [
+        "Connaught Place", "Lajpat Nagar", "Karol Bagh", "Rohini",
+        "Saket", "Dwarka", "Chandni Chowk", "Vasant Kunj"
+    ],
+    "Ahmedabad": [
+        "Navrangpura", "Satellite", "Vastrapur", "Bodakdev",
+        "Maninagar", "Paldi", "SG Highway", "Thaltej"
+    ],
+    "Pune": [
+        "Kothrud", "Viman Nagar", "Hinjewadi", "Baner",
+        "Wakad", "Shivaji Nagar", "Koregaon Park", "Hadapsar"
+    ],
+}
+
 
 def load_ward_data(csv_path: Path = DEMO_WARDS_CSV) -> List[Dict[str, str]]:
     """Load and cache fictional demo ward mapping."""

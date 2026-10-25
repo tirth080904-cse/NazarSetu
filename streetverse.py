@@ -1098,12 +1098,31 @@ def render_ai_investigation_workspace(lang: str = "en"):
 
         # City and Locality Selectors
         st.markdown("#### 2. Locality Jurisdiction")
-        cities = list(tools.SUPPORTED_LOCALITIES.keys())
+        ward_data = tools.load_ward_data()
+        city_locality_map: Dict[str, List[str]] = {}
+        for row in ward_data:
+            c = row.get("city", "").strip()
+            loc = row.get("locality", "").strip()
+            if c and loc:
+                city_locality_map.setdefault(c, []).append(loc)
+        for c in city_locality_map:
+            city_locality_map[c] = sorted(list(set(city_locality_map[c])))
+
+        if not city_locality_map:
+            city_locality_map = getattr(tools, "SUPPORTED_LOCALITIES", {
+                "Bengaluru": ["Indiranagar", "Koramangala", "Whitefield"],
+                "Mumbai": ["Bandra West", "Andheri East", "Dadar"],
+                "Delhi": ["Connaught Place", "Lajpat Nagar", "Karol Bagh"],
+                "Ahmedabad": ["Satellite", "Navrangpura", "Vastrapur"],
+                "Pune": ["Kothrud", "Viman Nagar", "Baner"],
+            })
+
+        cities = sorted(list(city_locality_map.keys()))
         default_city = st.session_state.get("sample_city", "Bengaluru")
         c_idx = cities.index(default_city) if default_city in cities else 0
         selected_city = st.selectbox("Municipal City", options=cities, index=c_idx, key="inv_sel_city")
 
-        localities = tools.SUPPORTED_LOCALITIES.get(selected_city, [])
+        localities = city_locality_map.get(selected_city, ["Indiranagar"])
         default_loc = st.session_state.get("sample_locality", localities[0] if localities else "")
         l_idx = localities.index(default_loc) if default_loc in localities else 0
         selected_locality = st.selectbox("Ward / Neighborhood Locality", options=localities, index=l_idx, key="inv_sel_loc")
