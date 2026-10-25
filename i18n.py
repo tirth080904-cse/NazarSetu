@@ -187,10 +187,30 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "hi": "📸 रिपोर्ट करें",
         "gu": "📸 ફરિયાદ કરો",
     },
+    "capsule_mission": {
+        "en": "🚀 AI Mission",
+        "hi": "🚀 एआई मिशन",
+        "gu": "🚀 એઆઈ મિશન",
+    },
     "capsule_track": {
-        "en": "🔍 Track",
-        "hi": "🔍 ट्रैक करें",
-        "gu": "🔍 ટ્રેક કરો",
+        "en": "🔍 Track Story",
+        "hi": "🔍 कहानी ट्रैक",
+        "gu": "🔍 વાર્તા ટ્રેક",
+    },
+    "capsule_civictwin": {
+        "en": "♊ CivicTwin",
+        "hi": "♊ सिविकट्विन",
+        "gu": "♊ સિવિકટ્વિન",
+    },
+    "capsule_pulse": {
+        "en": "📊 Neighborhood",
+        "hi": "📊 इलाका पल्स",
+        "gu": "📊 વિસ્તાર પલ્સ",
+    },
+    "capsule_admin": {
+        "en": "🛡️ Operations",
+        "hi": "🛡️ प्रशासन",
+        "gu": "🛡️ સંચાલન",
     },
     "capsule_ask_ai": {
         "en": "🤖 Ask AI",

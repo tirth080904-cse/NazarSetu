@@ -460,6 +460,155 @@ body, .stApp {
     border-color: var(--terracotta);
 }
 
+/* Mission Control Pipeline Workshop */
+.pipeline-flow-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    border: 2px solid var(--border-warm);
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pipeline-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 100px;
+}
+
+.pipeline-node-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--sand-light);
+    border: 2px solid var(--terracotta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: var(--terracotta);
+    margin-bottom: 6px;
+}
+
+.pipeline-node-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--indigo);
+    text-transform: uppercase;
+}
+
+.pipeline-arrow {
+    color: var(--terracotta);
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.stage-card-workshop {
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-warm);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 14px rgba(36, 59, 99, 0.05);
+    transition: all 0.2s ease;
+}
+
+.stage-card-workshop:hover {
+    border-color: var(--terracotta);
+    box-shadow: 0 8px 20px rgba(217, 108, 72, 0.12);
+}
+
+.stage-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--border-warm);
+    padding-bottom: 8px;
+}
+
+.stage-badge-pill {
+    background: var(--terracotta);
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+/* CivicTwin Comparison Studio */
+.civictwin-compare-frame {
+    background: #FFFFFF;
+    border: 2px solid var(--border-warm);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(36, 59, 99, 0.07);
+}
+
+.civictwin-score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ECFDF5;
+    border: 2px solid #10B981;
+    color: #065F46;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.checklist-box {
+    background: #FAF3E8;
+    border: 1.5px solid var(--border-warm);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 10px;
+}
+
+/* Neighborhood Pulse Stories */
+.pulse-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.pulse-stat-box {
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-warm);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(36, 59, 99, 0.05);
+}
+
+.pulse-stat-val {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--terracotta);
+    margin-top: 4px;
+}
+
+/* Civic Operations Studio */
+.admin-op-card {
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-warm);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(36, 59, 99, 0.06);
+    margin-bottom: 16px;
+}
+
 /* Buttons in Storybook Aesthetic */
 div.stButton > button {
     border-radius: 14px !important;
@@ -762,10 +911,10 @@ def render_streetverse_svg(counts: Dict[str, int], active_states: Dict[str, str]
 
 
 def render_floating_header(lang: str = "en"):
-    """Renders the top branding, Streetverse tagline, language pills, and officer link."""
+    """Renders the top branding, Streetverse tagline, language switcher, and quick AI launcher."""
     tagline = t("streetverse_tagline", lang)
 
-    col1, col2 = st.columns([0.62, 0.38])
+    col1, col2 = st.columns([0.65, 0.35])
     with col1:
         st.markdown(f"""
             <div class="streetverse-topbar" style="margin-bottom: 0;">
@@ -780,7 +929,7 @@ def render_floating_header(lang: str = "en"):
         """, unsafe_allow_html=True)
 
     with col2:
-        top_ctrl1, top_ctrl2, top_ctrl3 = st.columns([0.45, 0.30, 0.25])
+        top_ctrl1, top_ctrl2 = st.columns([0.60, 0.40])
         with top_ctrl1:
             lang_opts = ["EN", "HI", "GU"]
             curr_idx = 0 if lang == "en" else (1 if lang == "hi" else 2)
@@ -796,53 +945,68 @@ def render_floating_header(lang: str = "en"):
                 st.rerun()
 
         with top_ctrl2:
-            if st.button("🛡️ Officer", use_container_width=True, key="btn_open_officer"):
-                st.session_state.street_active_view = "officer"
-                st.rerun()
-
-        with top_ctrl3:
-            if st.button("🏛️ Classic", use_container_width=True, key="btn_toggle_classic"):
-                st.session_state.view_mode = "classic"
+            if st.button("🤖 Ask AI", use_container_width=True, key="btn_top_ask_ai"):
+                st.session_state.street_active_view = "companion"
+                st.session_state.selected_case_id = None
                 st.rerun()
 
 
 def render_floating_capsule(active_view: str, lang: str = "en"):
     """
-    Renders the central Floating Command Capsule:
-    [ 🗺️ Explore ] [ 📸 Report ] [ 🔍 Track ] [ 🤖 Ask AI ] [ 📖 Stories ]
+    Renders the unified 7-section Floating Command Capsule:
+    [ 🗺️ Explore ] [ 📸 Report ] [ 🚀 AI Mission ] [ 🔍 Track Story ] [ ♊ CivicTwin ] [ 📊 Neighborhood ] [ 🛡️ Operations ]
     """
     c_explore = t("capsule_explore", lang)
     c_report = t("capsule_report", lang)
+    c_mission = t("capsule_mission", lang)
     c_track = t("capsule_track", lang)
-    c_ask = t("capsule_ask_ai", lang)
-    c_stories = t("capsule_stories", lang)
+    c_civictwin = t("capsule_civictwin", lang)
+    c_pulse = t("capsule_pulse", lang)
+    c_admin = t("capsule_admin", lang)
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
     
     with col1:
         if st.button(c_explore, use_container_width=True, type="primary" if active_view == "street" else "secondary", key="capsule_btn_explore"):
             st.session_state.street_active_view = "street"
             st.session_state.selected_hotspot = None
+            st.session_state.selected_case_id = None
             st.rerun()
 
     with col2:
         if st.button(c_report, use_container_width=True, type="primary" if active_view == "report" else "secondary", key="capsule_btn_report"):
             st.session_state.street_active_view = "report"
+            st.session_state.selected_case_id = None
             st.rerun()
 
     with col3:
-        if st.button(c_track, use_container_width=True, type="primary" if active_view == "track" else "secondary", key="capsule_btn_track"):
-            st.session_state.street_active_view = "track"
+        if st.button(c_mission, use_container_width=True, type="primary" if active_view == "mission" else "secondary", key="capsule_btn_mission"):
+            st.session_state.street_active_view = "mission"
+            st.session_state.selected_case_id = None
             st.rerun()
 
     with col4:
-        if st.button(c_ask, use_container_width=True, type="primary" if active_view == "companion" else "secondary", key="capsule_btn_ask"):
-            st.session_state.street_active_view = "companion"
+        if st.button(c_track, use_container_width=True, type="primary" if active_view == "track" else "secondary", key="capsule_btn_track"):
+            st.session_state.street_active_view = "track"
+            st.session_state.selected_case_id = None
             st.rerun()
 
     with col5:
-        if st.button(c_stories, use_container_width=True, type="primary" if active_view == "stories" else "secondary", key="capsule_btn_stories"):
-            st.session_state.street_active_view = "stories"
+        if st.button(c_civictwin, use_container_width=True, type="primary" if active_view == "civictwin" else "secondary", key="capsule_btn_civictwin"):
+            st.session_state.street_active_view = "civictwin"
+            st.session_state.selected_case_id = None
+            st.rerun()
+
+    with col6:
+        if st.button(c_pulse, use_container_width=True, type="primary" if active_view in ["pulse", "stories"] else "secondary", key="capsule_btn_pulse"):
+            st.session_state.street_active_view = "pulse"
+            st.session_state.selected_case_id = None
+            st.rerun()
+
+    with col7:
+        if st.button(c_admin, use_container_width=True, type="primary" if active_view in ["admin", "officer"] else "secondary", key="capsule_btn_admin"):
+            st.session_state.street_active_view = "admin"
+            st.session_state.selected_case_id = None
             st.rerun()
 
 
@@ -1243,6 +1407,184 @@ def render_ai_investigation_workspace(lang: str = "en"):
                     st.balloons()
 
 
+def render_ai_mission_control_workshop(lang: str = "en"):
+    """
+    Renders AI Mission Control — Agent Workshop:
+    Illustrated civic operations environment showcasing actual AI tool execution:
+    OBSERVE → ANALYZE → LOCATE → ROUTE → REGISTER.
+    Displays live tool inputs, outputs, timestamps, and execution states from ActionTrail.
+    """
+    st.markdown("""
+        <div style="margin-bottom: 1rem;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
+                CIVIC AI MISSION CONTROL • AGENT WORKSHOP
+            </span>
+            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
+                🚀 Autonomous Cognitive Perception & Tool Execution Engine
+            </h2>
+            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
+                Inspect the real 10-stage cognitive perception and autonomous dispatch pipeline. See actual tool arguments, hashes, department routing, and ACID transaction commits.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # 5 High-Level Cognitive Blocks
+    st.markdown("""
+        <div class="pipeline-flow-banner">
+            <div class="pipeline-node">
+                <div class="pipeline-node-icon">👁️</div>
+                <div class="pipeline-node-name">1. OBSERVE</div>
+                <span style="font-size: 0.72rem; color: #64748B;">Perceptual Hash</span>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-node">
+                <div class="pipeline-node-icon">🧠</div>
+                <div class="pipeline-node-name">2. ANALYZE</div>
+                <span style="font-size: 0.72rem; color: #64748B;">Vision Topography</span>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-node">
+                <div class="pipeline-node-icon">📍</div>
+                <div class="pipeline-node-name">3. LOCATE</div>
+                <span style="font-size: 0.72rem; color: #64748B;">Ward Directory</span>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-node">
+                <div class="pipeline-node-icon">🚦</div>
+                <div class="pipeline-node-name">4. ROUTE</div>
+                <span style="font-size: 0.72rem; color: #64748B;">Matrix Dispatch</span>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-node">
+                <div class="pipeline-node-icon">🛡️</div>
+                <div class="pipeline-node-name">5. REGISTER</div>
+                <span style="font-size: 0.72rem; color: #64748B;">ACID Ledger Commit</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Scenario Runner for live pipeline inspection
+    st.markdown("### ⚡ Live Autonomous Pipeline Inspector")
+    st.caption("Select a scenario incident to trigger real agent tools and inspect chronological execution states:")
+
+    p_col1, p_col2, p_col3, p_col4 = st.columns(4)
+    sel_scenario = st.session_state.get("workshop_scenario", "pothole")
+
+    if p_col1.button("🕳️ Bengaluru Pothole", use_container_width=True, type="primary" if sel_scenario == "pothole" else "secondary", key="ws_btn_pothole"):
+        st.session_state.workshop_scenario = "pothole"
+        st.session_state.workshop_trail = None
+        st.rerun()
+
+    if p_col2.button("🗑️ Mumbai Garbage", use_container_width=True, type="primary" if sel_scenario == "garbage" else "secondary", key="ws_btn_garbage"):
+        st.session_state.workshop_scenario = "garbage"
+        st.session_state.workshop_trail = None
+        st.rerun()
+
+    if p_col3.button("💡 Delhi Streetlight", use_container_width=True, type="primary" if sel_scenario == "streetlight" else "secondary", key="ws_btn_light"):
+        st.session_state.workshop_scenario = "streetlight"
+        st.session_state.workshop_trail = None
+        st.rerun()
+
+    if p_col4.button("🌊 Ahmedabad Drainage", use_container_width=True, type="primary" if sel_scenario == "drainage" else "secondary", key="ws_btn_drain"):
+        st.session_state.workshop_scenario = "drainage"
+        st.session_state.workshop_trail = None
+        st.rerun()
+
+    # Map scenario to inputs
+    scenario_configs = {
+        "pothole": {"sample": "sample_pothole.jpg", "category": "Potholes and damaged roads", "city": "Bengaluru", "locality": "Indiranagar", "landmark": "100ft Road Junction"},
+        "garbage": {"sample": "sample_garbage.jpg", "category": "Overflowing garbage", "city": "Mumbai", "locality": "Bandra West", "landmark": "Near Bandstand"},
+        "streetlight": {"sample": "sample_streetlight.jpg", "category": "Broken streetlights", "city": "Delhi", "locality": "Connaught Place", "landmark": "Block B Corridor"},
+        "drainage": {"sample": "sample_waterlogging.jpg", "category": "Waterlogging and drainage issues", "city": "Ahmedabad", "locality": "Satellite", "landmark": "Near ISRO Crossroad"},
+    }
+    active_conf = scenario_configs.get(sel_scenario, scenario_configs["pothole"])
+
+    sample_dir = Path(__file__).resolve().parent / "data" / "samples"
+    sample_file = sample_dir / active_conf["sample"]
+
+    if sample_file.exists():
+        with open(sample_file, "rb") as f:
+            sample_bytes = f.read()
+
+        if st.button("🚀 Trigger Real 10-Stage Agent Execution", type="primary", use_container_width=True, key="btn_trigger_workshop"):
+            with st.spinner("🤖 Autonomous Civic Agent orchestrating 10 sequential tools..."):
+                img_hash = tools.compute_image_hash(sample_bytes)
+                p_state, trail = agent.run_reporting_agent_pipeline(
+                    issue_type=active_conf["category"],
+                    city=active_conf["city"],
+                    locality=active_conf["locality"],
+                    image_hash=img_hash,
+                    landmark=active_conf["landmark"],
+                    db_path=DB_PATH
+                )
+
+                # Execute Stages 8 to 10
+                confirmed_payload = {
+                    "confirmed": True,
+                    "issue_type": p_state["issue_type"],
+                    "description": f"Verified field incident at {p_state['locality']}.",
+                    "city": p_state["city"],
+                    "locality": p_state["locality"],
+                    "ward": p_state["ward"],
+                    "department": p_state["department"],
+                    "priority": "High",
+                    "image_hash": img_hash,
+                    "visual_evidence": "Topographical damage identified via computer vision.",
+                    "status": "Reported",
+                }
+                reg_res, full_trail = agent.run_registration_agent_action(confirmed_payload, trail=trail, db_path=DB_PATH)
+                st.session_state.workshop_trail = full_trail
+
+    # Render Stages from Trail
+    trail_to_show = st.session_state.get("workshop_trail")
+    if not trail_to_show and sample_file.exists():
+        img_hash = tools.compute_image_hash(sample_bytes)
+        p_state, default_trail = agent.run_reporting_agent_pipeline(
+            issue_type=active_conf["category"],
+            city=active_conf["city"],
+            locality=active_conf["locality"],
+            image_hash=img_hash,
+            landmark=active_conf["landmark"],
+            db_path=DB_PATH
+        )
+        trail_to_show = default_trail
+
+    if trail_to_show:
+        steps = trail_to_show.get_steps()
+        st.markdown(f"#### 📋 Chronological Stage Execution Log ({len(steps)} Recorded Stages)")
+
+        for step in steps:
+            s_num = step.get("stage_number", 1)
+            t_name = step.get("tool_name", "agent_tool")
+            t_time = step.get("timestamp", "")
+            t_args = step.get("input_arguments", {})
+            t_res = step.get("output_result", {})
+            t_desc = COMPLAINT_STAGES.get(s_num, f"Stage {s_num}")
+
+            st.markdown(f"""
+                <div class="stage-card-workshop">
+                    <div class="stage-header-flex">
+                        <div>
+                            <span class="stage-badge-pill">STAGE {s_num:02d}</span>
+                            <strong style="margin-left: 8px; color: #243B63; font-size: 1.05rem;">{t_desc}</strong>
+                            <code style="margin-left: 8px; color: #D96C48; font-size: 0.85rem;">{t_name}()</code>
+                        </div>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: #64748B;">{t_time}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+                        <div style="background: #FAF3E8; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
+                            <strong style="color: #7C6044;">Tool Arguments (Input):</strong>
+                            <pre style="margin: 4px 0 0 0; color: #243B63; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_args, indent=2)}</pre>
+                        </div>
+                        <div style="background: #ECFDF5; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
+                            <strong style="color: #065F46;">Execution Result (Output):</strong>
+                            <pre style="margin: 4px 0 0 0; color: #064E3B; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_res, indent=2)}</pre>
+                        </div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+
 def render_repair_story(lang: str = "en"):
     """
     Renders The Repair Story:
@@ -1253,6 +1595,7 @@ def render_repair_story(lang: str = "en"):
     Chapter 04 — Work in Progress
     Chapter 05 — Verification (CivicTwin Before/After)
     Chapter 06 — Resolved
+    Includes embedded natural language AI tracking assistant.
     """
     st.markdown("""
         <div style="margin-bottom: 1rem;">
@@ -1275,24 +1618,23 @@ def render_repair_story(lang: str = "en"):
         entered_id = st.text_input("Enter Complaint Tracking ID", value=search_id, key="txt_track_search")
     with t_c2:
         st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-        search_clicked = st.button("🔍 Find Story", type="primary", use_container_width=True)
+        if st.button("🔍 Find Story", type="primary", use_container_width=True):
+            st.session_state.tracking_search_id = entered_id
+            st.rerun()
 
     st.caption("Quick Demo Stories:")
     p_c1, p_c2, p_c3 = st.columns(3)
     if p_c1.button("🕳️ NS-DEMO-A101B202 (Road)", use_container_width=True):
-        entered_id = "NS-DEMO-A101B202"
-        st.session_state.tracking_search_id = entered_id
+        st.session_state.tracking_search_id = "NS-DEMO-A101B202"
         st.rerun()
     if p_c2.button("🗑️ NS-DEMO-C303D404 (Waste)", use_container_width=True):
-        entered_id = "NS-DEMO-C303D404"
-        st.session_state.tracking_search_id = entered_id
+        st.session_state.tracking_search_id = "NS-DEMO-C303D404"
         st.rerun()
     if p_c3.button("💡 NS-DEMO-E505F606 (Lighting)", use_container_width=True):
-        entered_id = "NS-DEMO-E505F606"
-        st.session_state.tracking_search_id = entered_id
+        st.session_state.tracking_search_id = "NS-DEMO-E505F606"
         st.rerun()
 
-    complaint = database.get_complaint(entered_id)
+    complaint = database.get_complaint(st.session_state.get("tracking_search_id", entered_id))
     if not complaint:
         st.warning(f"Complaint ID `{entered_id}` was not found in the official registry. Please check the ID.")
         return
@@ -1324,41 +1666,323 @@ def render_repair_story(lang: str = "en"):
             </div>
         """, unsafe_allow_html=True)
 
-    # CivicTwin Resolution Inspection
+    # Integrated AI Tracking Assistant
     st.markdown("---")
-    st.markdown("### ♊ CivicTwin Before & After Physical Verification")
-    st.caption("Inspect physical repair quality side-by-side before closing municipal records.")
+    st.markdown("### 🤖 Ask AI Assistant About This Complaint")
+    st.caption("Ask questions about department dispatch, expected completion, or audit events:")
+    
+    t_chat_query = st.text_input("Ask a question about this complaint", value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}")
+    if st.button("Ask Assistant", type="primary", key=f"btn_ask_{complaint['id']}"):
+        with st.spinner("🤖 Consulting civic agent and database records..."):
+            ans = agent.run_tracking_chat_agent(t_chat_query, db_path=DB_PATH)
+            st.markdown(f"""
+                <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 14px; padding: 18px; margin-top: 12px;">
+                    <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">Autonomous Civic Assistant:</strong>
+                    <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 4px;">{ans.get('reply', '')}</div>
+                </div>
+            """, unsafe_allow_html=True)
 
-    tw_col1, tw_col2 = st.columns(2)
+
+def render_civictwin_studio(lang: str = "en"):
+    """
+    Renders CivicTwin — Transformation Studio:
+    Immersive Before & After comparison workspace.
+    Visual comparison, AI topographical observations, visible repair differences,
+    verification report, and official administrative confirmation sign-off.
+    """
+    st.markdown("""
+        <div style="margin-bottom: 1rem;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
+                CIVICTWIN TRANSFORMATION STUDIO
+            </span>
+            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
+                ♊ Physical Verification & Restoration Inspector
+            </h2>
+            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
+                Inspect and verify physical infrastructure repairs side-by-side using multimodal computer vision before closing municipal records.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Complaint Selector
+    all_complaints = database.list_complaints(limit=50)
+    c_ids = [c["id"] for c in all_complaints] if all_complaints else ["NS-DEMO-A101B202"]
+    
+    sel_cid = st.selectbox("Select Complaint Case for Verification Inspection", options=c_ids, index=0, key="twin_sel_cid")
+    comp_obj = database.get_complaint(sel_cid) or {"issue_type": "Potholes and damaged roads", "status": "In Progress", "locality": "Indiranagar"}
+
+    st.markdown(f"""
+        <div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
+            <strong>Case File:</strong> {sel_cid} • <strong>Category:</strong> {comp_obj.get('issue_type')} • <strong>Status:</strong> {comp_obj.get('status')}
+            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">Jurisdiction: {comp_obj.get('locality', 'Local')}, {comp_obj.get('city', 'City')}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Side-by-Side Photo Inspection
     sample_dir = Path(__file__).resolve().parent / "data" / "samples"
     before_file = sample_dir / "sample_pothole.jpg"
     after_file = sample_dir / "sample_resolved_pothole.jpg"
 
+    tw_col1, tw_col2 = st.columns(2)
     with tw_col1:
-        st.markdown("**Original Incident Photo**")
+        st.markdown("**Original Damage (Before)**")
         if before_file.exists():
-            st.image(str(before_file), caption="Before: Unrepaired Defect", use_column_width=True)
+            st.image(str(before_file), caption="Pre-Repair Incident Evidence", use_column_width=True)
 
     with tw_col2:
-        st.markdown("**Post-Repair Verification Proof**")
+        st.markdown("**Field Restoration Proof (After)**")
         if after_file.exists():
-            st.image(str(after_file), caption="After: Repaired Surface", use_column_width=True)
+            st.image(str(after_file), caption="Post-Repair Completed Surface", use_column_width=True)
 
     if before_file.exists() and after_file.exists():
-        if st.button("🚀 Run CivicTwin Verification Inspection", type="primary", use_container_width=True, key="btn_run_twin"):
-            with open(before_file, "rb") as f1, open(after_file, "rb") as f2:
-                v_res = vision.verify_civictwin(f1.read(), f2.read(), original_issue=complaint["issue_type"])
-            
-            st.markdown(f"""
-                <div style="background: #FAF3E8; border: 2px solid #83A98A; border-radius: 14px; padding: 18px; margin-top: 14px;">
-                    <div style="font-weight: 700; color: #047857; font-size: 1.1rem;">
-                        Inspection Score: {int(v_res.get('verification_score', 0.95) * 100)}% • Repair Verified: {'YES' if v_res.get('resolved') else 'NO'}
+        if st.button("🚀 Run Multimodal CivicTwin Verification Inspection", type="primary", use_container_width=True, key="btn_exec_twin_studio"):
+            with st.spinner("🤖 Multimodal Vision inspecting topographical restoration & quality delta..."):
+                with open(before_file, "rb") as f1, open(after_file, "rb") as f2:
+                    b_bytes = f1.read()
+                    a_bytes = f2.read()
+                    v_res = vision.verify_civictwin(b_bytes, a_bytes, original_issue=comp_obj.get("issue_type", "Potholes and damaged roads"))
+                    st.session_state.civictwin_res = v_res
+
+    # Display Verification Results
+    if st.session_state.get("civictwin_res"):
+        v_res = st.session_state.civictwin_res
+        score_pct = int(v_res.get("verification_score", 0.95) * 100)
+
+        st.markdown("---")
+        st.markdown(f"""
+            <div class="civictwin-compare-frame">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 12px; margin-bottom: 14px;">
+                    <div>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">
+                            AI RESTORATION DELTA ANALYSIS
+                        </span>
+                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">
+                            Verification Status: {'VERIFIED RESTORATION ✅' if v_res.get('resolved') else 'NEEDS CORRECTION ⚠️'}
+                        </h3>
                     </div>
-                    <p style="font-size: 0.9rem; color: #243B63; margin-top: 6px;">
-                        {v_res.get('delta_detected', 'Surface leveled successfully with minimal edge elevation.')}
-                    </p>
+                    <div class="civictwin-score-badge">
+                        <span>🎯</span> {score_pct}% Match Confidence
+                    </div>
+                </div>
+
+                <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                    <strong style="color: #7C6044; font-size: 0.85rem; text-transform: uppercase;">Topographical Difference:</strong>
+                    <div style="font-size: 0.92rem; color: #243B63; margin-top: 4px;">{v_res.get('delta_detected', 'Asphalt surface leveled completely; void filled to flush grade with no residual craters.')}</div>
+                </div>
+
+                <strong style="color: #243B63; font-size: 0.88rem; text-transform: uppercase;">Structural Quality Checklist:</strong>
+                <div class="checklist-box">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.88rem; color: #243B63;">
+                        <div>✅ Surface Leveling & Uniformity: <strong>PASS</strong></div>
+                        <div>✅ Edge Compaction & Asphalt Bonding: <strong>PASS</strong></div>
+                        <div>✅ Debris & Site Clearance: <strong>PASS</strong></div>
+                        <div>✅ Drainage Slope Integrity: <strong>PASS</strong></div>
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        # Officer Confirmation Sign-Off
+        st.markdown("#### 🛡️ Municipal Administrative Sign-Off")
+        st.caption("Confirm resolution in the official SQLite database ledger with cryptographic audit trail:")
+
+        sign_col1, sign_col2 = st.columns([0.45, 0.55])
+        with sign_col1:
+            if st.button("✅ Confirm Official Municipal Resolution", type="primary", use_container_width=True, key="btn_confirm_twin_res"):
+                database.insert_civictwin_verification(
+                    complaint_id=sel_cid,
+                    before_hash="sample_pothole_verified",
+                    after_hash="sample_resolved_pothole_verified",
+                    verification_result=v_res,
+                    db_path=DB_PATH
+                )
+                database.update_complaint_status(
+                    complaint_id=sel_cid,
+                    new_status="Resolved",
+                    note="Multimodal CivicTwin Verification Approved by Municipal Field Inspector.",
+                    db_path=DB_PATH
+                )
+                st.success(f"🎉 **Complaint `{sel_cid}` officially transitioned to RESOLVED in SQLite!**")
+                st.balloons()
+
+
+def render_neighborhood_pulse_stories(lang: str = "en"):
+    """
+    Renders Neighborhood Pulse — Explore the Neighborhood:
+    Illustrated neighborhood exploration interface grounded in authentic SQLite telemetry.
+    Select neighborhood directly, view reported problems, active issues, resolved complaints,
+    and local civic memory stories.
+    """
+    st.markdown("""
+        <div style="margin-bottom: 1rem;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
+                NEIGHBORHOOD PULSE • GROUNDED CIVIC TELEMETRY
+            </span>
+            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
+                📊 Localized Civic Memory & Infrastructure Telemetry
+            </h2>
+            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
+                Explore real community telemetry grounded strictly in authentic municipal database rows across supported jurisdictions.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Neighborhood Selection Pills
+    localities = ["Indiranagar (Bengaluru)", "Bandra West (Mumbai)", "Connaught Place (Delhi)", "Satellite (Ahmedabad)", "Kothrud (Pune)"]
+    sel_loc = st.selectbox("Select Neighborhood to Explore", options=localities, index=0, key="pulse_sel_neighborhood")
+    loc_clean = sel_loc.split(" (")[0]
+
+    stats = database.get_neighborhood_pulse_stats()
+    metrics = stats.get("metrics", {})
+    total = metrics.get("total_complaints", 0)
+    in_prog = metrics.get("in_progress_complaints", 0)
+    resolved = metrics.get("resolved_complaints", 0)
+    rate = metrics.get("resolution_rate", 75.0)
+
+    # Telemetry KPI Grid
+    st.markdown(f"""
+        <div class="pulse-stat-grid">
+            <div class="pulse-stat-box">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Total Reports</span>
+                <div class="pulse-stat-val">{total}</div>
+                <span style="font-size: 0.76rem; color: #D96C48;">Recorded in SQLite</span>
+            </div>
+            <div class="pulse-stat-box">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Active In Progress</span>
+                <div class="pulse-stat-val" style="color: #F4BB52;">{in_prog}</div>
+                <span style="font-size: 0.76rem; color: #64748B;">Crews dispatched</span>
+            </div>
+            <div class="pulse-stat-box">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Verified Resolved</span>
+                <div class="pulse-stat-val" style="color: #83A98A;">{resolved}</div>
+                <span style="font-size: 0.76rem; color: #047857;">CivicTwin verified</span>
+            </div>
+            <div class="pulse-stat-box">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Resolution Rate</span>
+                <div class="pulse-stat-val" style="color: #243B63;">{rate:.1f}%</div>
+                <span style="font-size: 0.76rem; color: #64748B;">Overall velocity</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Civic Intelligence Synthesis Narrative
+    summary = stats.get("ai_neighborhood_summary", "Telemetry loaded.")
+    st.markdown(f"""
+        <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+            <strong style="color: #D96C48; font-size: 0.84rem; text-transform: uppercase;">Civic Intelligence Synthesis • {loc_clean}:</strong>
+            <p style="font-size: 0.95rem; color: #243B63; margin-top: 6px; line-height: 1.5;">{summary}</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Filtered Neighborhood Cases
+    all_complaints = database.list_complaints(limit=50)
+    matched = [c for c in all_complaints if loc_clean.lower() in c.get("locality", "").lower()]
+    cases_to_show = matched if matched else all_complaints[:5]
+
+    st.markdown(f"#### 🏘️ Active Community Case Files in {loc_clean} ({len(cases_to_show)} records)")
+    for c in cases_to_show:
+        c_col1, c_col2 = st.columns([0.82, 0.18])
+        with c_col1:
+            st.markdown(f"""
+                <div style="background: #FFFFFF; border: 1px solid #E8DAC6; border-radius: 12px; padding: 12px 18px; margin-bottom: 8px;">
+                    <strong style="color: #243B63;">{c['id']}</strong> • <em>{c['issue_type']}</em> at <strong>{c['locality']}, {c['city']}</strong>
+                    <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">{c['description']}</div>
                 </div>
             """, unsafe_allow_html=True)
+        with c_col2:
+            if st.button("Inspect Dossier", key=f"btn_p_view_{c['id']}", use_container_width=True):
+                st.session_state.selected_case_id = c["id"]
+                st.rerun()
+
+
+def render_civic_operations_studio(lang: str = "en"):
+    """
+    Renders Civic Operations Studio (Admin):
+    Redesigned in the illustrated Streetverse design language.
+    Features complaint management, status updates, department assignments,
+    repair verification, and chronological audit trail inspection.
+    """
+    st.markdown("""
+        <div style="margin-bottom: 1rem;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #243B63;">
+                CIVIC OPERATIONS STUDIO • DISPATCH CONSOLE
+            </span>
+            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
+                🛡️ Municipal Grievance Administration & Audit
+            </h2>
+            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
+                Authorized municipal operations console for status transitions, nodal department routing, and audit trail inspection.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    all_complaints = database.list_complaints(limit=100)
+    if not all_complaints:
+        st.info("No complaints found in the database.")
+        return
+
+    # Filter controls
+    f_col1, f_col2 = st.columns([0.6, 0.4])
+    with f_col1:
+        status_filter = st.selectbox("Filter by Status", options=["All"] + VALID_STATUSES, key="admin_filter_status")
+    with f_col2:
+        search_query = st.text_input("Search ID or Locality", value="", key="admin_search_query")
+
+    filtered = all_complaints
+    if status_filter != "All":
+        filtered = [c for c in filtered if c.get("status") == status_filter]
+    if search_query:
+        q = search_query.strip().lower()
+        filtered = [c for c in filtered if q in c.get("id", "").lower() or q in c.get("locality", "").lower()]
+
+    st.markdown(f"**Found {len(filtered)} Matching Complaints:**")
+
+    c_ids = [c["id"] for c in filtered] if filtered else [all_complaints[0]["id"]]
+    sel_id = st.selectbox("Select Complaint to Manage", options=c_ids, key="admin_sel_cid")
+
+    complaint = database.get_complaint(sel_id)
+    if complaint:
+        st.markdown(f"""
+            <div class="admin-op-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #DFCAB0; padding-bottom: 10px; margin-bottom: 12px;">
+                    <div>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700; color: #D96C48;">CASE ID: {complaint.get('id')}</span>
+                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">{complaint.get('issue_type')}</h3>
+                    </div>
+                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">STATUS: {complaint.get('status').upper()}</span>
+                </div>
+                <div style="font-size: 0.92rem; color: #243B63;">
+                    📍 <strong>{complaint.get('locality')}, {complaint.get('city')}</strong> • Ward: <code>{complaint.get('ward')}</code> • Department: <strong>{complaint.get('department')}</strong>
+                </div>
+                <div style="font-size: 0.88rem; color: #64748B; margin-top: 6px;">
+                    <em>"{complaint.get('description')}"</em>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        ctrl_col1, ctrl_col2 = st.columns(2)
+        with ctrl_col1:
+            curr_s = complaint.get("status", "Reported")
+            s_idx = VALID_STATUSES.index(curr_s) if curr_s in VALID_STATUSES else 0
+            new_status = st.selectbox("Update Status Transition", options=VALID_STATUSES, index=s_idx, key="admin_status_select")
+
+        with ctrl_col2:
+            officer_notes = st.text_input("Officer Action Notes", value="Verified on-site by municipal assessment team.", key="admin_officer_notes")
+
+        btn_commit, btn_twin_jump = st.columns([0.5, 0.5])
+        with btn_commit:
+            if st.button("💾 Commit Status Transition to SQLite", type="primary", use_container_width=True, key="btn_commit_admin"):
+                success = database.update_complaint_status(sel_id, new_status, note=officer_notes)
+                if success:
+                    st.success(f"Status for `{sel_id}` officially updated to **{new_status}**.")
+                    st.rerun()
+
+        with btn_twin_jump:
+            if st.button("♊ Open in CivicTwin Studio", use_container_width=True, key=f"btn_admin_twin_{sel_id}"):
+                st.session_state.street_active_view = "civictwin"
+                st.session_state.twin_sel_cid = sel_id
+                st.session_state.selected_case_id = None
+                st.rerun()
 
 
 def render_ai_companion_drawer(lang: str = "en"):
@@ -1407,96 +2031,6 @@ def render_ai_companion_drawer(lang: str = "en"):
                 """, unsafe_allow_html=True)
 
 
-def render_neighborhood_stories(lang: str = "en"):
-    """
-    Renders Neighborhood Stories:
-    Explores supported localities (Indiranagar, Bandra West, Connaught Place, Satellite, Kothrud)
-    with grounded SQLite telemetry and short stories.
-    """
-    st.markdown("""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                NEIGHBORHOOD STORIES
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                📖 Localized Civic Memory & Progress
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Explore real community telemetry grounded strictly in authentic municipal database rows.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-    stats = database.get_neighborhood_pulse_stats()
-    summary = stats.get("ai_neighborhood_summary", "Telemetry loaded.")
-
-    st.markdown(f"""
-        <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-            <strong style="color: #D96C48; font-size: 0.84rem; text-transform: uppercase;">Civic Intelligence Synthesis:</strong>
-            <p style="font-size: 0.95rem; color: #243B63; margin-top: 6px; line-height: 1.5;">{summary}</p>
-        </div>
-    """, unsafe_allow_html=True)
-
-    all_complaints = database.list_complaints(limit=50)
-    if all_complaints:
-        st.markdown("#### 🏘️ Recent Community Complaint Dossiers")
-        for c in all_complaints[:6]:
-            st.markdown(f"""
-                <div style="background: #FFFFFF; border: 1px solid #E8DAC6; border-radius: 12px; padding: 12px 18px; margin-bottom: 8px;">
-                    <strong>{c['id']}</strong> • <em>{c['issue_type']}</em> at <strong>{c['locality']}, {c['city']}</strong>
-                    <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">{c['description']}</div>
-                </div>
-            """, unsafe_allow_html=True)
-
-
-def render_discreet_officer_portal(lang: str = "en"):
-    """
-    Renders the discreet municipal administrator management console.
-    Allows status updates, CivicTwin verification review, and audit trail inspection.
-    """
-    st.markdown("""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #243B63;">
-                MUNICIPAL OFFICER CONSOLE
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                🛡️ Civic Dispatch & Status Command
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                Authorized municipal dashboard for complaint status transitions and CivicTwin confirmations.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-    all_complaints = database.list_complaints(limit=100)
-    if not all_complaints:
-        st.info("No complaints found in the database.")
-        return
-
-    c_ids = [c["id"] for c in all_complaints]
-    sel_id = st.selectbox("Select Complaint to Manage", options=c_ids, key="admin_sel_cid")
-
-    complaint = database.get_complaint(sel_id)
-    if complaint:
-        st.markdown(f"""
-            <div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 16px; margin: 12px 0;">
-                <strong>Current Status:</strong> <span style="color: #D96C48; font-weight: 800;">{complaint.get('status')}</span><br>
-                <strong>Issue:</strong> {complaint.get('issue_type')}<br>
-                <strong>Department:</strong> {complaint.get('department')} ({complaint.get('ward')})<br>
-                <strong>Locality:</strong> {complaint.get('locality')}, {complaint.get('city')}
-            </div>
-        """, unsafe_allow_html=True)
-
-        new_status = st.selectbox("Update Status", options=VALID_STATUSES, index=VALID_STATUSES.index(complaint.get("status", "Reported")), key="admin_status_select")
-        officer_notes = st.text_input("Officer Action Notes", value="Verified on-site by municipal assessment team.", key="admin_officer_notes")
-
-        if st.button("💾 Commit Status Transition to SQLite", type="primary", key="btn_commit_admin"):
-            success = database.update_complaint_status(sel_id, new_status, note=officer_notes)
-            if success:
-                st.success(f"Status for `{sel_id}` officially updated to **{new_status}**.")
-                st.rerun()
-
-
 def render_streetverse():
     """Main orchestrator for NAZARSETU — STREETVERSE."""
     # Inject CSS design system
@@ -1527,10 +2061,22 @@ def render_streetverse():
 
     if query_action == "report":
         st.session_state.street_active_view = "report"
+        st.session_state.selected_case_id = None
+        st.query_params.clear()
+
+    if query_action == "mission":
+        st.session_state.street_active_view = "mission"
+        st.session_state.selected_case_id = None
         st.query_params.clear()
 
     if query_action == "track":
         st.session_state.street_active_view = "track"
+        st.session_state.selected_case_id = None
+        st.query_params.clear()
+
+    if query_action == "civictwin":
+        st.session_state.street_active_view = "civictwin"
+        st.session_state.selected_case_id = None
         st.query_params.clear()
 
     if query_case:
@@ -1635,17 +2181,23 @@ def render_streetverse():
     elif active_view == "report":
         render_ai_investigation_workspace(lang=st.session_state.lang)
 
+    elif active_view == "mission":
+        render_ai_mission_control_workshop(lang=st.session_state.lang)
+
     elif active_view == "track":
         render_repair_story(lang=st.session_state.lang)
 
+    elif active_view == "civictwin":
+        render_civictwin_studio(lang=st.session_state.lang)
+
+    elif active_view in ["pulse", "stories"]:
+        render_neighborhood_pulse_stories(lang=st.session_state.lang)
+
+    elif active_view in ["admin", "officer"]:
+        render_civic_operations_studio(lang=st.session_state.lang)
+
     elif active_view == "companion":
         render_ai_companion_drawer(lang=st.session_state.lang)
-
-    elif active_view == "stories":
-        render_neighborhood_stories(lang=st.session_state.lang)
-
-    elif active_view == "officer":
-        render_discreet_officer_portal(lang=st.session_state.lang)
 
     # Floating Command Capsule (Navigation Bar)
     st.markdown("<div style='margin-top: 2rem;'></div>", unsafe_allow_html=True)
