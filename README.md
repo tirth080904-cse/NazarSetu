@@ -2,14 +2,16 @@
 > **See the Problem. Bridge to Action.**  
 > *From a single photograph to meaningful civic action — powered by autonomous AI agents.*
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tirth080904-cse/NazarSetu)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?template=https%3A%2F%2Fgithub.com%2Ftirth080904-cse%2FNazarSetu)
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### 🌐 Live Cloud Web Application:
-**Instant Access from Any Browser (Mobile, Desktop, Tablet):**
-👉 **[Launch NazarSetu Live Web App](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/)**  
-*(Direct Cloud URL: [https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/))*
+- **Render Cloud Service (Independent Cloud Host):** 👉 **[Deploy 1-Click to Render](https://render.com/deploy?repo=https://github.com/tirth080904-cse/NazarSetu)**
+- **Railway Cloud App:** 👉 **[Deploy 1-Click to Railway](https://railway.app/template?template=https%3A%2F%2Fgithub.com%2Ftirth080904-cse%2FNazarSetu)**
+- **Streamlit Cloud Web App:** 👉 **[Launch NazarSetu Live Web App](https://tirth080904-cse-nazarsetu-app-94zmc9.streamlit.app/)**
 
 **Category:** Agentic AI / Smart Cities / Civic Intelligence & Autonomous Action  
 **Edition:** Autonomous Civic Intelligence Platform (v2.0 Hackathon Edition)  
