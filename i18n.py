@@ -153,6 +153,23 @@ TRANSLATIONS: Dict[str, Dict[str, str]] = {
         "hi": "विभाग हेतु अनुशंसित कार्ययोजना",
         "gu": "વિભાગ માટે ભલામણ કરેલ કાર્ય યોજના",
     },
+
+    # Theme
+    "theme_title": {
+        "en": "Theme Mode",
+        "hi": "थीम मोड (Theme)",
+        "gu": "થીમ મોડ (Theme)",
+    },
+    "theme_light": {
+        "en": "☀️ Light Mode",
+        "hi": "☀️ लाइट मोड",
+        "gu": "☀️ લાઇટ મોડ",
+    },
+    "theme_dark": {
+        "en": "🌙 Dark Mode",
+        "hi": "🌙 डार्क मोड",
+        "gu": "🌙 ડાર્ક મોડ",
+    },
 }
 
 

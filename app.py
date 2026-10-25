@@ -52,6 +52,9 @@ database.seed_demo_complaints()
 if "lang" not in st.session_state:
     st.session_state.lang = "en"
 
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+
 if "action_trail" not in st.session_state:
     st.session_state.action_trail = agent.ActionTrail()
 
@@ -96,6 +99,17 @@ with st.sidebar:
         st.session_state.lang = "en"
 
     lang = st.session_state.lang
+
+    st.markdown("---")
+    st.markdown(f"### 🎨 {t('theme_title', lang)}")
+    th_col1, th_col2 = st.columns(2)
+    current_theme = st.session_state.get("theme", "light")
+    if th_col1.button("☀️ Light", use_container_width=True, type="primary" if current_theme == "light" else "secondary", key="theme_btn_light"):
+        st.session_state.theme = "light"
+        st.rerun()
+    if th_col2.button("🌙 Dark", use_container_width=True, type="primary" if current_theme == "dark" else "secondary", key="theme_btn_dark"):
+        st.session_state.theme = "dark"
+        st.rerun()
 
     st.markdown("---")
     st.markdown("### 🏛️ Operational Engine")
@@ -152,8 +166,17 @@ with st.sidebar:
     st.markdown("---")
     st.caption("NazarSetu v2.0 • Civic Intelligence Command Center")
 
+# Quick Top Action Bar: Theme Mode Switcher
+top_c1, top_c2 = st.columns([0.82, 0.18])
+with top_c2:
+    cur_theme = st.session_state.get("theme", "light")
+    toggle_label = "🌙 Dark Mode" if cur_theme == "light" else "☀️ Light Mode"
+    if st.button(toggle_label, use_container_width=True, key="top_quick_theme_toggle"):
+        st.session_state.theme = "dark" if cur_theme == "light" else "light"
+        st.rerun()
+
 # Render Smart City Command Center Header & Hackathon Disclaimer
-components.render_header(lang=st.session_state.lang)
+components.render_header(lang=st.session_state.lang, theme=st.session_state.get("theme", "light"))
 components.render_disclaimer(lang=st.session_state.lang)
 
 # Main Navigation Tabs
@@ -187,10 +210,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #0EA5E9; height: 100%;">
                 <div class="intel-label" style="color: #0284C7;">1. Civic Intelligence Engine</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     Multimodal Impact & Severity
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Goes far beyond object detection. Analyzes citizen impact (pedestrians, vehicles, elderly),
                     computes rule-based transparent safety heuristics, and generates dynamic departmental action plans.
                 </div>
@@ -201,10 +224,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #F59E0B; height: 100%;">
                 <div class="intel-label" style="color: #D97706;">2. AI Civic Mission Control</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     10-Stage Verifiable Pipeline
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Live command center timeline showing genuine Python tool invocations, SHA-256 evidence hashing,
                     ward coordinate matching, and strict affirmative citizen authorization.
                 </div>
@@ -215,10 +238,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #8B5CF6; height: 100%;">
                 <div class="intel-label" style="color: #7C3AED;">3. CivicTwin AI Verification</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     Before & After Proof Verification
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Inspects repair completion side-by-side with original photos. Checks road leveling, debris removal,
                     and enforces strict human-in-the-loop sign-off before closing tickets.
                 </div>
@@ -232,10 +255,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #10B981; height: 100%;">
                 <div class="intel-label" style="color: #059669;">4. Neighborhood Pulse Analytics</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     Grounded SQLite Metrics
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Real-time community telemetry grounded strictly in authentic municipal database rows.
                     Zero hallucinated city statistics. Real turnaround rates and localized issue distribution.
                 </div>
@@ -246,10 +269,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #EF4444; height: 100%;">
                 <div class="intel-label" style="color: #DC2626;">5. Smart Duplicate Shield</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     Cluster & Signature Matching
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Prevents municipal system clutter by matching image hashes and locality clusters.
                     Gives citizens full transparency to link to existing tickets or file distinct reports.
                 </div>
@@ -260,10 +283,10 @@ with tab_overview:
         components.render_html("""
             <div class="intel-item" style="border-top: 4px solid #6366F1; height: 100%;">
                 <div class="intel-label" style="color: #4F46E5;">6. Multilingual Accessibility</div>
-                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: #0A1128;">
+                <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-primary);">
                     Tri-Lingual Native Support
                 </div>
-                <div style="font-size: 0.88rem; color: #475569; line-height: 1.45;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45;">
                     Built for true civic inclusion across India with native English, Hindi (हिंदी),
                     and Gujarati (ગુજરાતી) dictionary engines with zero external dependencies.
                 </div>

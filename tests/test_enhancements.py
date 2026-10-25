@@ -29,6 +29,7 @@ import database
 import tools
 import vision
 import agent
+import components
 from i18n import t, TRANSLATIONS
 
 
@@ -249,3 +250,41 @@ def test_tracking_agent_natural_language_queries():
     # Search query
     res_search = agent.run_tracking_chat_agent("Show pending complaints")
     assert "complaints" in res_search["reply"].lower()
+
+
+# 8. Test Dynamic Light/Dark Themes and HTML Sanitization
+def test_theme_and_html_rendering_sanitization(monkeypatch):
+    light_css = components.get_custom_css("light")
+    dark_css = components.get_custom_css("dark")
+
+    assert "#F8FAFC" in light_css
+    assert "#FFFFFF" in light_css
+    assert "#0A0F1D" in dark_css
+    assert "#131E32" in dark_css
+
+    # Test render_html sanitizes leading indentation and empty lines
+    captured = []
+    if hasattr(components.st, "html"):
+        monkeypatch.setattr(components.st, "html", lambda s: captured.append(s))
+    else:
+        monkeypatch.setattr(components.st, "markdown", lambda s, unsafe_allow_html=False: captured.append(s))
+
+    test_raw_html = """
+        <div class="intelligence-card">
+            <div class="intelligence-header">Title</div>
+
+            <div class="intel-grid">
+                <div class="intel-item">Item</div>
+            </div>
+        </div>
+    """
+    components.render_html(test_raw_html)
+    assert len(captured) == 1
+    rendered = captured[0]
+    # Ensure no line starts with 4+ spaces of indentation (which triggers Markdown code block)
+    for line in rendered.splitlines():
+        assert not line.startswith("    "), f"Indented line found: {line}"
+        assert not line.startswith("\t"), f"Tabbed line found: {line}"
+    assert '<div class="intel-grid">' in rendered
+    assert '<div class="intel-item">Item</div>' in rendered
+
