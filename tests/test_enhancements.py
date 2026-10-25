@@ -343,3 +343,29 @@ def test_streetverse_engine():
         assert len(meta["default_locality"]) > 2
 
 
+# 10. Test Streetverse Harmonization Across All Pages & Languages
+def test_all_streetverse_pages_harmonization():
+    css = streetverse.get_streetverse_css()
+    # Confirm storybook classes exist in CSS
+    assert ".storybook-page-hero" in css
+    assert ".hero-tagline-badge" in css
+    assert ".hero-page-title" in css
+    assert ".polaroid-frame" in css
+    assert ".terminal-window" in css
+    assert ".admin-control-bar" in css
+    assert "Plus Jakarta Sans" in css
+    assert "JetBrains Mono" in css
+
+    # Test all section tags and headlines exist for all languages
+    sections = ["inv", "story", "mission", "twin", "pulse", "admin", "companion"]
+    for lang in ["en", "hi", "gu"]:
+        for sec in sections:
+            tag = t(f"{sec}_tag", lang)
+            headline = t(f"{sec}_headline", lang)
+            desc = t(f"{sec}_desc", lang)
+            assert tag != "", f"Missing tag for {sec} in {lang}"
+            assert headline != "", f"Missing headline for {sec} in {lang}"
+            assert desc != "", f"Missing desc for {sec} in {lang}"
+
+
+

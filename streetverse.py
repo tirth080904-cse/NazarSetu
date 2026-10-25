@@ -609,6 +609,240 @@ body, .stApp {
     margin-bottom: 16px;
 }
 
+.admin-control-bar {
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-warm);
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 18px rgba(36, 59, 99, 0.05);
+}
+
+/* Page Hero Container across all sections */
+.storybook-page-hero {
+    background: linear-gradient(135deg, rgba(255, 252, 245, 0.98) 0%, rgba(244, 231, 211, 0.92) 100%);
+    border: 2px solid var(--border-warm);
+    border-radius: 22px;
+    padding: 24px 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 12px 32px -8px rgba(36, 59, 99, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.storybook-page-hero::after {
+    content: "";
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(244, 187, 82, 0.28) 0%, rgba(244, 187, 82, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-tagline-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(217, 108, 72, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(217, 108, 72, 0.25);
+    margin-bottom: 8px;
+}
+
+.hero-page-title {
+    font-family: 'Fraunces', serif !important;
+    font-size: 2.1rem !important;
+    font-weight: 800 !important;
+    color: var(--indigo) !important;
+    margin: 0 !important;
+    line-height: 1.15 !important;
+}
+
+.hero-page-desc {
+    color: #64748B !important;
+    font-size: 0.96rem !important;
+    margin-top: 6px !important;
+    margin-bottom: 0 !important;
+    max-width: 900px;
+    line-height: 1.5;
+}
+
+/* Photographic Evidence Frame */
+.polaroid-frame {
+    background: #FFFFFF;
+    border: 2px solid var(--border-warm);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 14px 32px rgba(36, 59, 99, 0.1);
+    position: relative;
+    text-align: center;
+}
+
+.polaroid-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed var(--border-warm);
+    padding-top: 8px;
+}
+
+/* Interactive Workshop Terminals */
+.terminal-window {
+    background: #0F172A;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.terminal-header {
+    background: #1E293B;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #94A3B8;
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.terminal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.terminal-body {
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: #E2E8F0;
+    overflow-x: auto;
+    max-height: 240px;
+    line-height: 1.45;
+}
+
+/* Storybook Form Controls Overrides */
+div[data-baseweb="input"] > div, div[data-baseweb="base-input"] {
+    background: #FFFDF8 !important;
+    border: 1.5px solid var(--border-warm) !important;
+    border-radius: 12px !important;
+    color: var(--indigo) !important;
+    transition: all 0.2s ease !important;
+}
+
+div[data-baseweb="input"] > div:focus-within, div[data-baseweb="base-input"]:focus-within {
+    border-color: var(--terracotta) !important;
+    box-shadow: 0 0 0 3px rgba(217, 108, 72, 0.2) !important;
+}
+
+div[data-baseweb="input"] input {
+    color: var(--indigo) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 0.92rem !important;
+}
+
+div[data-baseweb="select"] > div {
+    background: #FFFDF8 !important;
+    border: 1.5px solid var(--border-warm) !important;
+    border-radius: 12px !important;
+    color: var(--indigo) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    transition: all 0.2s ease !important;
+}
+
+div[data-baseweb="select"] > div:hover {
+    border-color: var(--terracotta) !important;
+}
+
+div[data-baseweb="popover"], ul[role="listbox"] {
+    background: #FFFDF8 !important;
+    border: 1.5px solid var(--border-warm) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 14px 34px rgba(36, 59, 99, 0.16) !important;
+}
+
+li[role="option"] {
+    color: var(--indigo) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    border-radius: 8px !important;
+    margin: 2px 4px !important;
+}
+
+li[role="option"]:hover, li[aria-selected="true"] {
+    background: var(--sand-light) !important;
+    color: var(--terracotta) !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stFileUploadDropzone"] {
+    background: rgba(255, 252, 245, 0.85) !important;
+    border: 2px dashed var(--terracotta) !important;
+    border-radius: 18px !important;
+    padding: 24px 16px !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-testid="stFileUploadDropzone"]:hover {
+    background: var(--sand-light) !important;
+    border-color: var(--terracotta-dark) !important;
+}
+
+[data-testid="stFileUploadDropzone"] button {
+    background: var(--terracotta) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+}
+
+div[data-testid="stAlert"] {
+    border-radius: 14px !important;
+    border: 1.5px solid var(--border-warm) !important;
+    background: #FFFDF8 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    color: var(--indigo) !important;
+}
+
+/* Headings and Code */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', serif !important;
+    color: var(--indigo) !important;
+}
+
+code {
+    background: var(--sand-light) !important;
+    color: var(--terracotta) !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    padding: 2px 6px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--border-warm) !important;
+}
+
 /* Buttons in Storybook Aesthetic */
 div.stButton > button {
     border-radius: 14px !important;
@@ -617,6 +851,21 @@ div.stButton > button {
     transition: all 0.2s ease !important;
     border: 1.5px solid var(--border-warm) !important;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+div.stButton > button:not([kind="primary"]) {
+    background: #FFFDF8 !important;
+    color: var(--indigo) !important;
+    border: 1.5px solid var(--border-warm) !important;
+    box-shadow: 0 3px 10px rgba(36, 59, 99, 0.04) !important;
+}
+
+div.stButton > button:not([kind="primary"]):hover {
+    background: var(--sand-light) !important;
+    border-color: var(--terracotta) !important;
+    color: var(--terracotta) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 14px rgba(217, 108, 72, 0.14) !important;
 }
 
 div.stButton > button[kind="primary"] {
@@ -1131,19 +1380,21 @@ def render_case_file_drawer(complaint: Dict[str, Any], lang: str = "en"):
     # Chronological Audit Trail
     events = database.get_complaint_timeline(cid)
     if events:
-        st.markdown(f"#### {t('official_event_trail', lang)}")
+        st.markdown(f"#### 📜 {t('official_event_trail', lang)}")
+        st.markdown('<div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 14px 20px; margin-bottom: 18px; box-shadow: 0 4px 14px rgba(36, 59, 99, 0.04);">', unsafe_allow_html=True)
         for ev in events:
             st.markdown(f"""
                 <div style="display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 1px dashed #DFCAB0;">
-                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #D96C48; width: 150px;">
-                        {ev.get('created_at', '')}
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #D96C48; width: 160px; font-weight: 600;">
+                        ⏱️ {ev.get('created_at', '')}
                     </span>
                     <div>
-                        <strong style="color: #243B63; font-size: 0.88rem;">{t(ev.get('event_type', ''), lang)}</strong>
-                        <div style="font-size: 0.84rem; color: #64748B; margin-top: 2px;">{ev.get('details', '')}</div>
+                        <strong style="color: #243B63; font-size: 0.9rem;">{t(ev.get('event_type', ''), lang)}</strong>
+                        <div style="font-size: 0.85rem; color: #64748B; margin-top: 2px;">{ev.get('details', '')}</div>
                     </div>
                 </div>
             """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     btn_c1, btn_c2 = st.columns([0.4, 0.6])
     with btn_c1:
@@ -1173,18 +1424,12 @@ def render_hotspot_explorer(target_key: str, lang: str = "en"):
     btn_report_lbl = t("report_at_location", lang)
 
     st.markdown(f"""
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <div>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: {meta['color']};">
-                    {tag_insp}
-                </span>
-                <h2 style="font-family: 'Fraunces', serif; font-size: 1.8rem; color: #243B63; margin: 0;">
-                    {meta['icon']} {c_title}
-                </h2>
-                <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                    {c_hint} • {lbl_nodal}: <strong>{c_dept}</strong>
-                </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge" style="color: {meta['color']}; border-color: {meta['color']};">
+                {meta['icon']} {tag_insp} • {lbl_nodal}: {c_dept}
             </div>
+            <h1 class="hero-page-title">{c_title}</h1>
+            <p class="hero-page-desc">{c_hint}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1239,23 +1484,18 @@ def render_ai_investigation_workspace(lang: str = "en"):
     p3 = t("stage_3_pill", lang)
     p4 = t("stage_4_pill", lang)
 
+    # Streetverse Page Hero
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {tag_inv}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {head_inv}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {desc_inv}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">🔍 {tag_inv}</div>
+            <h1 class="hero-page-title">{head_inv}</h1>
+            <p class="hero-page-desc">{desc_inv}</p>
         </div>
     """, unsafe_allow_html=True)
 
     # Stage Indicators
     st.markdown(f"""
-        <div style="display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; margin-bottom: 1.4rem; flex-wrap: wrap;">
             <div class="investigation-step-pill active">{p1}</div>
             <div class="investigation-step-pill">{p2}</div>
             <div class="investigation-step-pill">{p3}</div>
@@ -1268,7 +1508,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
     image_bytes = None
 
     with col_input:
-        st.markdown(f"#### {t('upload_heading', lang)}")
+        st.markdown(f"#### 📸 {t('upload_heading', lang)}")
         uploaded_file = st.file_uploader(
             t("upload_label", lang),
             type=["jpg", "jpeg", "png"],
@@ -1278,28 +1518,28 @@ def render_ai_investigation_workspace(lang: str = "en"):
 
         st.caption(t("test_cases_label", lang))
         s_c1, s_c2, s_c3, s_c4 = st.columns(4)
-        if s_c1.button(t("scenario_pothole", lang), use_container_width=True, key="inv_s_pothole"):
+        if s_c1.button(f"🕳️ {t('scenario_pothole', lang)}", use_container_width=True, key="inv_s_pothole"):
             st.session_state.selected_sample = "sample_pothole.jpg"
             st.session_state.sample_hint = "Potholes and damaged roads"
             st.session_state.sample_city = "Bengaluru"
             st.session_state.sample_locality = "Indiranagar"
             st.rerun()
 
-        if s_c2.button(t("scenario_garbage", lang), use_container_width=True, key="inv_s_garbage"):
+        if s_c2.button(f"🗑️ {t('scenario_garbage', lang)}", use_container_width=True, key="inv_s_garbage"):
             st.session_state.selected_sample = "sample_garbage.jpg"
             st.session_state.sample_hint = "Overflowing garbage"
             st.session_state.sample_city = "Mumbai"
             st.session_state.sample_locality = "Bandra West"
             st.rerun()
 
-        if s_c3.button(t("scenario_light", lang), use_container_width=True, key="inv_s_light"):
+        if s_c3.button(f"💡 {t('scenario_light', lang)}", use_container_width=True, key="inv_s_light"):
             st.session_state.selected_sample = "sample_streetlight.jpg"
             st.session_state.sample_hint = "Broken streetlights"
             st.session_state.sample_city = "Delhi"
             st.session_state.sample_locality = "Connaught Place"
             st.rerun()
 
-        if s_c4.button(t("scenario_drain", lang), use_container_width=True, key="inv_s_drain"):
+        if s_c4.button(f"🌊 {t('scenario_drain', lang)}", use_container_width=True, key="inv_s_drain"):
             st.session_state.selected_sample = "sample_waterlogging.jpg"
             st.session_state.sample_hint = "Waterlogging and drainage issues"
             st.session_state.sample_city = "Ahmedabad"
@@ -1307,7 +1547,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
             st.rerun()
 
         # City and Locality Selectors
-        st.markdown(f"#### {t('locality_heading', lang)}")
+        st.markdown(f"#### 📍 {t('locality_heading', lang)}")
         ward_data = tools.load_ward_data()
         city_locality_map: Dict[str, List[str]] = {}
         for row in ward_data:
@@ -1342,23 +1582,45 @@ def render_ai_investigation_workspace(lang: str = "en"):
     with col_preview:
         if uploaded_file:
             image_bytes = uploaded_file.getvalue()
+            st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
             st.image(image_bytes, caption="Uploaded Evidence", use_column_width=True)
+            st.markdown(f"""
+                <div class="polaroid-badge">
+                    <span>EVIDENCE DOSSIER</span>
+                    <span>LIVE UPLOAD</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         elif st.session_state.get("selected_sample"):
             sample_file = sample_dir / st.session_state.selected_sample
             if sample_file.exists():
                 with open(sample_file, "rb") as f:
                     image_bytes = f.read()
+                st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
                 st.image(image_bytes, caption=f"Demo Incident: {st.session_state.selected_sample}", use_column_width=True)
+                st.markdown(f"""
+                    <div class="polaroid-badge">
+                        <span>ARCHIVED EVIDENCE</span>
+                        <span>{st.session_state.get('sample_city', 'URBAN')}</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
-                <div style="border: 2px dashed #DFCAB0; border-radius: 16px; padding: 60px 20px; text-align: center; color: #7C6044;">
-                    {t('photo_placeholder', lang)}
+                <div class="polaroid-frame" style="padding: 48px 20px;">
+                    <div style="font-size: 2.4rem; margin-bottom: 10px;">📷</div>
+                    <div style="font-family: 'Fraunces', serif; font-size: 1.15rem; color: #243B63; font-weight: 700;">
+                        {t('photo_placeholder', lang)}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #7C6044; margin-top: 6px;">
+                        Select a test incident or upload camera footage to begin AI investigation.
+                    </div>
                 </div>
             """, unsafe_allow_html=True)
 
     # Action Button
     if image_bytes:
-        st.markdown("---")
+        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
         if st.button(t("btn_run_investigation", lang), type="primary", use_container_width=True, key="btn_run_investigation"):
             with st.spinner("🤖 Multimodal Vision Engine analyzing surface topography, severity & risk..."):
                 hint_cat = st.session_state.get("sample_hint", "Potholes and damaged roads")
@@ -1429,7 +1691,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
         """, unsafe_allow_html=True)
 
         # Stage 3: Affirmative Confirmation
-        st.markdown(f"#### {t('human_affirmation_heading', lang)}")
+        st.markdown(f"#### ⚖️ {t('human_affirmation_heading', lang)}")
         st.markdown(t("human_affirmation_text", lang))
 
         confirm_col1, confirm_col2 = st.columns([0.45, 0.55])
@@ -1460,6 +1722,37 @@ def render_ai_investigation_workspace(lang: str = "en"):
                     st.success(f"{t('case_created_success', lang)} `{cid}`")
                     st.balloons()
 
+    # Stage 4: Case Created Docket
+    if st.session_state.get("registered_case_id"):
+        cid = st.session_state.registered_case_id
+        st.markdown(f"""
+            <div style="background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 2px solid #059669; border-radius: 18px; padding: 22px; margin-top: 20px; box-shadow: 0 10px 25px rgba(5, 150, 105, 0.12);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #065F46;">STAGE 04 • {p4}</span>
+                        <h3 style="font-family: 'Fraunces', serif; color: #064E3B; margin: 4px 0 0 0;">🎉 {t('case_created_success', lang)}: <code>{cid}</code></h3>
+                    </div>
+                    <span style="background: #059669; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;">
+                        CIVIC LEDGER SEALED
+                    </span>
+                </div>
+                <p style="font-size: 0.9rem; color: #065F46; margin: 8px 0 0 0;">
+                    Your complaint has been permanently registered and autonomously routed to the nodal department. Follow the full resolution story below.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        post_c1, post_c2 = st.columns(2)
+        with post_c1:
+            if st.button(t("btn_follow_repair_story", lang), type="primary", use_container_width=True, key="btn_post_track"):
+                st.session_state.street_active_view = "track"
+                st.session_state.tracking_search_id = cid
+                st.rerun()
+        with post_c2:
+            if st.button(t("btn_return_street", lang), use_container_width=True, key="btn_post_street"):
+                st.session_state.street_active_view = "street"
+                st.rerun()
+
 
 def render_ai_mission_control_workshop(lang: str = "en"):
     """
@@ -1473,16 +1766,10 @@ def render_ai_mission_control_workshop(lang: str = "en"):
     m_desc = t("mission_desc", lang)
 
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {m_tag}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {m_head}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {m_desc}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">⚡ {m_tag}</div>
+            <h1 class="hero-page-title">{m_head}</h1>
+            <p class="hero-page-desc">{m_desc}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1522,7 +1809,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
     """, unsafe_allow_html=True)
 
     # Scenario Runner for live pipeline inspection
-    st.markdown(f"### {t('pipeline_inspector_title', lang)}")
+    st.markdown(f"### ⚙️ {t('pipeline_inspector_title', lang)}")
     st.caption(t("pipeline_inspector_desc", lang))
 
     p_col1, p_col2, p_col3, p_col4 = st.columns(4)
@@ -1609,7 +1896,7 @@ def render_ai_mission_control_workshop(lang: str = "en"):
 
     if trail_to_show:
         steps = trail_to_show.get_steps()
-        st.markdown(f"#### {t('execution_log_title', lang)} ({len(steps)})")
+        st.markdown(f"#### 📜 {t('execution_log_title', lang)} ({len(steps)})")
 
         for step in steps:
             s_num = step.get("stage_number", 1)
@@ -1628,16 +1915,30 @@ def render_ai_mission_control_workshop(lang: str = "en"):
                             <strong style="margin-left: 8px; color: #243B63; font-size: 1.05rem;">{t_desc}</strong>
                             <code style="margin-left: 8px; color: #D96C48; font-size: 0.85rem;">{t_name}()</code>
                         </div>
-                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: #64748B;">{t_time}</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: #64748B;">⏱️ {t_time}</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
-                        <div style="background: #FAF3E8; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
-                            <strong style="color: #7C6044;">{t('tool_input_label', lang)}</strong>
-                            <pre style="margin: 4px 0 0 0; color: #243B63; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_args, indent=2)}</pre>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px;">
+                        <div class="terminal-window">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <span class="terminal-dot" style="background: #EF4444;"></span>
+                                    <span class="terminal-dot" style="background: #F59E0B;"></span>
+                                    <span class="terminal-dot" style="background: #10B981;"></span>
+                                </div>
+                                <span>INPUT_PAYLOAD.json</span>
+                            </div>
+                            <div class="terminal-body"><pre style="margin: 0; background: transparent !important; padding: 0 !important; border: none !important; color: #E2E8F0;">{json.dumps(t_args, indent=2)}</pre></div>
                         </div>
-                        <div style="background: #ECFDF5; border-radius: 8px; padding: 10px; font-size: 0.82rem;">
-                            <strong style="color: #065F46;">{t('tool_output_label', lang)}</strong>
-                            <pre style="margin: 4px 0 0 0; color: #064E3B; font-size: 0.78rem; overflow-x: auto;">{json.dumps(t_res, indent=2)}</pre>
+                        <div class="terminal-window">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <span class="terminal-dot" style="background: #EF4444;"></span>
+                                    <span class="terminal-dot" style="background: #F59E0B;"></span>
+                                    <span class="terminal-dot" style="background: #10B981;"></span>
+                                </div>
+                                <span style="color: #34D399;">OUTPUT_TELEMETRY.json</span>
+                            </div>
+                            <div class="terminal-body"><pre style="margin: 0; background: transparent !important; padding: 0 !important; border: none !important; color: #34D399;">{json.dumps(t_res, indent=2)}</pre></div>
                         </div>
                     </div>
                 </div>
@@ -1657,20 +1958,15 @@ def render_repair_story(lang: str = "en"):
     Includes embedded natural language AI tracking assistant.
     """
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {t('story_tag', lang)}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {t('story_headline', lang)}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {t('story_desc', lang)}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">📖 {t('story_tag', lang)}</div>
+            <h1 class="hero-page-title">{t('story_headline', lang)}</h1>
+            <p class="hero-page-desc">{t('story_desc', lang)}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Search & Sample Pills
+    # Search & Sample Registry Bar
+    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
     search_id = st.session_state.get("tracking_search_id", "NS-DEMO-A101B202")
     t_c1, t_c2 = st.columns([0.75, 0.25])
     with t_c1:
@@ -1692,6 +1988,7 @@ def render_repair_story(lang: str = "en"):
     if p_c3.button(f"💡 {t('demo_light_story', lang)}", use_container_width=True):
         st.session_state.tracking_search_id = "NS-DEMO-E505F606"
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
     complaint = database.get_complaint(st.session_state.get("tracking_search_id", entered_id))
     if not complaint:
@@ -1703,6 +2000,39 @@ def render_repair_story(lang: str = "en"):
     curr_idx = status_order.index(curr_status) if curr_status in status_order else 0
 
     dept_tr = t(complaint.get('department', 'Municipal Authority'), lang)
+    cat_tr = t(complaint.get('issue_type', 'Infrastructure Issue'), lang)
+    loc_tr = t(complaint.get('locality', 'Local'), lang)
+    city_tr = t(complaint.get('city', 'Metro'), lang)
+    status_tr = t(curr_status, lang)
+
+    # Active Incident Story Dossier
+    prog_pct = min(100, int(((curr_idx + 1) / len(status_order)) * 100))
+    st.markdown(f"""
+        <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px; margin: 18px 0; box-shadow: 0 10px 28px rgba(36, 59, 99, 0.07);">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 12px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                <div>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">STORY DOSSIER • {complaint.get('id')}</span>
+                    <h3 style="font-family: 'Fraunces', serif; color: #243B63; margin: 2px 0 0 0;">{cat_tr}</h3>
+                </div>
+                <div>
+                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF; font-size: 0.82rem;">{t('status_label', lang)}: {status_tr.upper()}</span>
+                </div>
+            </div>
+            <div style="font-size: 0.92rem; color: #243B63;">
+                📍 <strong>{loc_tr}, {city_tr}</strong> • {t('ward_label', lang)}: <code>{complaint.get('ward')}</code> • {t('assigned_authority', lang)}: <strong>{dept_tr}</strong>
+            </div>
+            <div style="margin-top: 14px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: #64748B; margin-bottom: 4px;">
+                    <span>RESOLUTION NARRATIVE ARC</span>
+                    <span>{prog_pct}% COMPLETE</span>
+                </div>
+                <div style="height: 8px; background: #FAF3E8; border-radius: 10px; overflow: hidden; border: 1px solid #DFCAB0;">
+                    <div style="height: 100%; width: {prog_pct}%; background: linear-gradient(90deg, #F4BB52 0%, #D96C48 100%); border-radius: 10px;"></div>
+                </div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
     chapters = [
         {"num": "01", "name": t("ch1_title", lang), "desc": t("ch1_desc", lang), "stage": 0},
         {"num": "02", "name": t("ch2_title", lang), "desc": t("ch2_desc", lang), "stage": 0},
@@ -1712,7 +2042,7 @@ def render_repair_story(lang: str = "en"):
         {"num": "06", "name": t("ch6_title", lang), "desc": t("ch6_desc", lang), "stage": 4},
     ]
 
-    st.markdown(f"### {t('story_chapters_title', lang)}")
+    st.markdown(f"### 📚 {t('story_chapters_title', lang)}")
     for ch in chapters:
         is_active = ch["stage"] <= curr_idx
         card_cls = "story-chapter-card" if is_active else "story-chapter-card inactive"
@@ -1727,20 +2057,25 @@ def render_repair_story(lang: str = "en"):
         """, unsafe_allow_html=True)
 
     # Integrated AI Tracking Assistant
-    st.markdown("---")
-    st.markdown(f"### {t('ask_ai_complaint_title', lang)}")
-    st.caption(t("ask_ai_complaint_caption", lang))
+    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+        <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.06);">
+            <div class="hero-tagline-badge">🤖 CITY COMPANION DIALOGUE</div>
+            <h3 style="font-family: 'Fraunces', serif; color: #243B63; margin: 4px 0 0 0;">{t('ask_ai_complaint_title', lang)}</h3>
+            <p style="font-size: 0.88rem; color: #64748B; margin: 4px 0 14px 0;">{t('ask_ai_complaint_caption', lang)}</p>
+    """, unsafe_allow_html=True)
     
-    t_chat_query = st.text_input(t("ask_ai_complaint_title", lang), value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}")
+    t_chat_query = st.text_input(t("ask_ai_complaint_title", lang), value=f"What is the current status of complaint {complaint['id']}?", key=f"chat_in_{complaint['id']}", label_visibility="collapsed")
     if st.button(t("btn_ask_assistant", lang), type="primary", key=f"btn_ask_{complaint['id']}"):
         with st.spinner("🤖 Consulting civic agent and database records..."):
             ans = agent.run_tracking_chat_agent(t_chat_query, db_path=DB_PATH)
             st.markdown(f"""
-                <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 14px; padding: 18px; margin-top: 12px;">
-                    <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}</strong>
-                    <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 4px;">{ans.get('reply', '')}</div>
+                <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 18px; margin-top: 14px;">
+                    <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}:</strong>
+                    <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">{ans.get('reply', '')}</div>
                 </div>
             """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_civictwin_studio(lang: str = "en"):
@@ -1751,20 +2086,15 @@ def render_civictwin_studio(lang: str = "en"):
     verification report, and official administrative confirmation sign-off.
     """
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {t('twin_tag', lang)}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {t('twin_headline', lang)}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {t('twin_desc', lang)}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">🏛️ {t('twin_tag', lang)}</div>
+            <h1 class="hero-page-title">{t('twin_headline', lang)}</h1>
+            <p class="hero-page-desc">{t('twin_desc', lang)}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Complaint Selector
+    # Complaint Selector Bar
+    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
     all_complaints = database.list_complaints(limit=50)
     c_ids = [c["id"] for c in all_complaints] if all_complaints else ["NS-DEMO-A101B202"]
     
@@ -1777,11 +2107,12 @@ def render_civictwin_studio(lang: str = "en"):
     city_tr = t(comp_obj.get('city', 'City'), lang)
 
     st.markdown(f"""
-        <div style="background: #FFFFFF; border: 1.5px solid #DFCAB0; border-radius: 14px; padding: 16px; margin-bottom: 16px;">
-            <strong>{t('case_dossier_tag', lang)}:</strong> {sel_cid} • <strong>{t('diagnosis_label', lang)}:</strong> {cat_tr} • <strong>{t('status_label', lang)}:</strong> {status_tr}
-            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">{loc_tr}, {city_tr}</div>
+        <div style="font-size: 0.95rem; color: #243B63; margin-top: 10px;">
+            <strong>{t('case_dossier_tag', lang)}:</strong> <code>{sel_cid}</code> • <strong>{t('diagnosis_label', lang)}:</strong> {cat_tr} • <strong>{t('status_label', lang)}:</strong> <span class="dossier-meta-pill dossier-pill-medium">{status_tr.upper()}</span>
+            <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">📍 {loc_tr}, {city_tr}</div>
         </div>
     """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # Side-by-Side Photo Inspection
     sample_dir = Path(__file__).resolve().parent / "data" / "samples"
@@ -1790,16 +2121,31 @@ def render_civictwin_studio(lang: str = "en"):
 
     tw_col1, tw_col2 = st.columns(2)
     with tw_col1:
-        st.markdown(f"**{t('before_photo_label', lang)}**")
+        st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
         if before_file.exists():
             st.image(str(before_file), caption=t("before_photo_label", lang), use_column_width=True)
+        st.markdown(f"""
+            <div class="polaroid-badge" style="color: #DC2626;">
+                <span>⚠️ {t('before_photo_label', lang)}</span>
+                <span>ORIGINAL DEFECT</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     with tw_col2:
-        st.markdown(f"**{t('after_photo_label', lang)}**")
+        st.markdown('<div class="polaroid-frame">', unsafe_allow_html=True)
         if after_file.exists():
             st.image(str(after_file), caption=t("after_photo_label", lang), use_column_width=True)
+        st.markdown(f"""
+            <div class="polaroid-badge" style="color: #059669;">
+                <span>✅ {t('after_photo_label', lang)}</span>
+                <span>COMPLETION EVIDENCE</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     if before_file.exists() and after_file.exists():
+        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
         if st.button(t("btn_run_twin_studio", lang), type="primary", use_container_width=True, key="btn_exec_twin_studio"):
             with st.spinner("🤖 Multimodal Vision inspecting topographical restoration & quality delta..."):
                 with open(before_file, "rb") as f1, open(after_file, "rb") as f2:
@@ -1817,7 +2163,7 @@ def render_civictwin_studio(lang: str = "en"):
         st.markdown("---")
         st.markdown(f"""
             <div class="civictwin-compare-frame">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 12px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #E8DAC6; padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div>
                         <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; color: #D96C48;">
                             {t('ai_delta_tag', lang)}
@@ -1831,25 +2177,25 @@ def render_civictwin_studio(lang: str = "en"):
                     </div>
                 </div>
 
-                <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                <div style="background: #FAF3E8; border: 1px solid #DFCAB0; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
                     <strong style="color: #7C6044; font-size: 0.85rem; text-transform: uppercase;">{t('topography_diff_label', lang)}</strong>
-                    <div style="font-size: 0.92rem; color: #243B63; margin-top: 4px;">{v_res.get('delta_detected', 'Asphalt surface leveled completely; void filled to flush grade with no residual craters.')}</div>
+                    <div style="font-size: 0.92rem; color: #243B63; margin-top: 4px; line-height: 1.5;">{v_res.get('delta_detected', 'Asphalt surface leveled completely; void filled to flush grade with no residual craters.')}</div>
                 </div>
 
-                <strong style="color: #243B63; font-size: 0.88rem; text-transform: uppercase;">{t('checklist_title', lang)}</strong>
+                <strong style="color: #243B63; font-size: 0.88rem; text-transform: uppercase;">📋 {t('checklist_title', lang)}</strong>
                 <div class="checklist-box">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.88rem; color: #243B63;">
-                        <div>{t('check_1', lang)}</div>
-                        <div>{t('check_2', lang)}</div>
-                        <div>{t('check_3', lang)}</div>
-                        <div>{t('check_4', lang)}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; color: #243B63;">
+                        <div>✅ {t('check_1', lang)}</div>
+                        <div>✅ {t('check_2', lang)}</div>
+                        <div>✅ {t('check_3', lang)}</div>
+                        <div>✅ {t('check_4', lang)}</div>
                     </div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
 
         # Officer Confirmation Sign-Off
-        st.markdown(f"#### {t('admin_signoff_title', lang)}")
+        st.markdown(f"#### ✍️ {t('admin_signoff_title', lang)}")
         st.caption(t("admin_signoff_desc", lang))
 
         sign_col1, sign_col2 = st.columns([0.45, 0.55])
@@ -1880,23 +2226,19 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     and local civic memory stories.
     """
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {t('pulse_tag', lang)}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {t('pulse_headline', lang)}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {t('pulse_desc', lang)}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">🏘️ {t('pulse_tag', lang)}</div>
+            <h1 class="hero-page-title">{t('pulse_headline', lang)}</h1>
+            <p class="hero-page-desc">{t('pulse_desc', lang)}</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Neighborhood Selection Pills
+    # Neighborhood Selection Bar
+    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
     localities = ["Indiranagar (Bengaluru)", "Bandra West (Mumbai)", "Connaught Place (Delhi)", "Satellite (Ahmedabad)", "Kothrud (Pune)"]
     sel_loc = st.selectbox(t("select_neighborhood_label", lang), options=localities, index=0, key="pulse_sel_neighborhood")
     loc_clean = sel_loc.split(" (")[0]
+    st.markdown('</div>', unsafe_allow_html=True)
 
     stats = database.get_neighborhood_pulse_stats()
     metrics = stats.get("metrics", {})
@@ -1908,25 +2250,25 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     # Telemetry KPI Grid
     st.markdown(f"""
         <div class="pulse-stat-grid">
-            <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('total_reports', lang)}</span>
+            <div class="pulse-stat-box" style="border-top: 4px solid var(--terracotta);">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">📋 {t('total_reports', lang)}</span>
                 <div class="pulse-stat-val">{total}</div>
-                <span style="font-size: 0.76rem; color: #D96C48;">{t('recorded_in_sqlite', lang)}</span>
+                <span style="font-size: 0.76rem; color: #D96C48; font-weight: 600;">{t('recorded_in_sqlite', lang)}</span>
             </div>
-            <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('active_in_progress', lang)}</span>
-                <div class="pulse-stat-val" style="color: #F4BB52;">{in_prog}</div>
-                <span style="font-size: 0.76rem; color: #64748B;">{t('crews_dispatched', lang)}</span>
+            <div class="pulse-stat-box" style="border-top: 4px solid var(--mango);">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">🚧 {t('active_in_progress', lang)}</span>
+                <div class="pulse-stat-val" style="color: #D97706;">{in_prog}</div>
+                <span style="font-size: 0.76rem; color: #64748B; font-weight: 600;">{t('crews_dispatched', lang)}</span>
             </div>
-            <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('verified_resolved', lang)}</span>
-                <div class="pulse-stat-val" style="color: #83A98A;">{resolved}</div>
-                <span style="font-size: 0.76rem; color: #047857;">{t('civictwin_verified', lang)}</span>
+            <div class="pulse-stat-box" style="border-top: 4px solid var(--sage);">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">✅ {t('verified_resolved', lang)}</span>
+                <div class="pulse-stat-val" style="color: #059669;">{resolved}</div>
+                <span style="font-size: 0.76rem; color: #047857; font-weight: 600;">{t('civictwin_verified', lang)}</span>
             </div>
-            <div class="pulse-stat-box">
-                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">{t('resolution_rate', lang)}</span>
+            <div class="pulse-stat-box" style="border-top: 4px solid var(--indigo);">
+                <span style="font-size: 0.8rem; color: #64748B; font-weight: 700; text-transform: uppercase;">⚡ {t('resolution_rate', lang)}</span>
                 <div class="pulse-stat-val" style="color: #243B63;">{rate:.1f}%</div>
-                <span style="font-size: 0.76rem; color: #64748B;">{t('overall_velocity', lang)}</span>
+                <span style="font-size: 0.76rem; color: #64748B; font-weight: 600;">{t('overall_velocity', lang)}</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -1934,9 +2276,14 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
     # Civic Intelligence Synthesis Narrative
     summary = stats.get("ai_neighborhood_summary", "Telemetry loaded.")
     st.markdown(f"""
-        <div style="background: #FAF3E8; border: 1.5px solid #DFCAB0; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-            <strong style="color: #D96C48; font-size: 0.84rem; text-transform: uppercase;">{t('civic_intelligence_synthesis', lang)} • {loc_clean}:</strong>
-            <p style="font-size: 0.95rem; color: #243B63; margin-top: 6px; line-height: 1.5;">{summary}</p>
+        <div style="background: linear-gradient(135deg, #FFFDF8 0%, #FAF3E8 100%); border: 2px solid #DFCAB0; border-radius: 18px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.05); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 800; color: #D96C48; text-transform: uppercase; letter-spacing: 0.08em;">
+                    📰 {t('civic_intelligence_synthesis', lang)} • {loc_clean}
+                </span>
+                <span style="font-size: 0.75rem; color: #64748B; font-weight: 700;">AUTONOMOUS AI SYNTHESIS</span>
+            </div>
+            <p style="font-size: 0.96rem; color: #243B63; margin: 0; line-height: 1.6; font-style: italic;">"{summary}"</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1950,12 +2297,19 @@ def render_neighborhood_pulse_stories(lang: str = "en"):
         c_col1, c_col2 = st.columns([0.82, 0.18])
         with c_col1:
             st.markdown(f"""
-                <div style="background: #FFFFFF; border: 1px solid #E8DAC6; border-radius: 12px; padding: 12px 18px; margin-bottom: 8px;">
-                    <strong style="color: #243B63;">{c['id']}</strong> • <em>{t(c['issue_type'], lang)}</em> at <strong>{t(c['locality'], lang)}, {t(c['city'], lang)}</strong>
-                    <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">{c['description']}</div>
+                <div style="background: #FFFFFF; border: 1.5px solid #E8DAC6; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(36, 59, 99, 0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong style="color: #243B63; font-size: 0.98rem;">{c['id']}</strong>
+                        <span class="dossier-meta-pill dossier-pill-medium">{t(c['status'], lang).upper()}</span>
+                    </div>
+                    <div style="font-size: 0.92rem; color: #D96C48; font-weight: 700; margin-top: 4px;">
+                        {t(c['issue_type'], lang)} at <strong>{t(c['locality'], lang)}, {t(c['city'], lang)}</strong>
+                    </div>
+                    <div style="font-size: 0.84rem; color: #64748B; margin-top: 4px;">{c['description']}</div>
                 </div>
             """, unsafe_allow_html=True)
         with c_col2:
+            st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
             if st.button(t("btn_inspect_dossier", lang), key=f"btn_p_view_{c['id']}", use_container_width=True):
                 st.session_state.selected_case_id = c["id"]
                 st.rerun()
@@ -1969,16 +2323,10 @@ def render_civic_operations_studio(lang: str = "en"):
     repair verification, and chronological audit trail inspection.
     """
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #243B63;">
-                {t('admin_tag', lang)}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 2rem; color: #243B63; margin: 0;">
-                {t('admin_headline', lang)}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {t('admin_desc', lang)}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">🛡️ {t('admin_tag', lang)}</div>
+            <h1 class="hero-page-title">{t('admin_headline', lang)}</h1>
+            <p class="hero-page-desc">{t('admin_desc', lang)}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -1987,12 +2335,14 @@ def render_civic_operations_studio(lang: str = "en"):
         st.info("No complaints found in the database.")
         return
 
-    # Filter controls
+    # Filter controls in Storybook Control Bar
+    st.markdown('<div class="admin-control-bar">', unsafe_allow_html=True)
     f_col1, f_col2 = st.columns([0.6, 0.4])
     with f_col1:
         status_filter = st.selectbox(t("filter_status_label", lang), options=["All"] + VALID_STATUSES, key="admin_filter_status")
     with f_col2:
         search_query = st.text_input(t("search_id_locality", lang), value="", key="admin_search_query")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     filtered = all_complaints
     if status_filter != "All":
@@ -2001,7 +2351,7 @@ def render_civic_operations_studio(lang: str = "en"):
         q = search_query.strip().lower()
         filtered = [c for c in filtered if q in c.get("id", "").lower() or q in c.get("locality", "").lower()]
 
-    st.markdown(f"**{t('found_matching_complaints', lang)} {len(filtered)}**")
+    st.markdown(f"**📋 {t('found_matching_complaints', lang)} {len(filtered)}**")
 
     c_ids = [c["id"] for c in filtered] if filtered else [all_complaints[0]["id"]]
     sel_id = st.selectbox(t("select_complaint_manage", lang), options=c_ids, key="admin_sel_cid")
@@ -2016,17 +2366,17 @@ def render_civic_operations_studio(lang: str = "en"):
 
         st.markdown(f"""
             <div class="admin-op-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #DFCAB0; padding-bottom: 10px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px dashed #DFCAB0; padding-bottom: 12px; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
                     <div>
                         <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 700; color: #D96C48;">CASE ID: {complaint.get('id')}</span>
-                        <h3 style="font-family: 'Fraunces', serif; margin: 0; color: #243B63;">{c_issue}</h3>
+                        <h3 style="font-family: 'Fraunces', serif; margin: 2px 0 0 0; color: #243B63;">{c_issue}</h3>
                     </div>
-                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF;">{t('status_label', lang)}: {c_status.upper()}</span>
+                    <span class="dossier-meta-pill" style="background: #243B63; color: #FFFFFF; font-size: 0.82rem;">{t('status_label', lang)}: {c_status.upper()}</span>
                 </div>
                 <div style="font-size: 0.92rem; color: #243B63;">
                     📍 <strong>{c_loc}, {c_city}</strong> • {t('ward_label', lang)}: <code>{complaint.get('ward')}</code> • {t('assigned_authority', lang)}: <strong>{c_dept}</strong>
                 </div>
-                <div style="font-size: 0.88rem; color: #64748B; margin-top: 6px;">
+                <div style="font-size: 0.88rem; color: #64748B; margin-top: 8px; background: #FAF3E8; padding: 10px 14px; border-radius: 10px; border: 1px solid #DFCAB0;">
                     <em>"{complaint.get('description')}"</em>
                 </div>
             </div>
@@ -2063,16 +2413,10 @@ def render_ai_companion_drawer(lang: str = "en"):
     Lives cleanly inside the command capsule context without taking over the screen.
     """
     st.markdown(f"""
-        <div style="margin-bottom: 1rem;">
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: #D96C48;">
-                {t('companion_tag', lang)}
-            </span>
-            <h2 style="font-family: 'Fraunces', serif; font-size: 1.8rem; color: #243B63; margin: 0;">
-                {t('companion_headline', lang)}
-            </h2>
-            <p style="color: #64748B; font-size: 0.92rem; margin-top: 4px;">
-                {t('companion_desc', lang)}
-            </p>
+        <div class="storybook-page-hero">
+            <div class="hero-tagline-badge">🤖 {t('companion_tag', lang)}</div>
+            <h1 class="hero-page-title">{t('companion_headline', lang)}</h1>
+            <p class="hero-page-desc">{t('companion_desc', lang)}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -2099,7 +2443,7 @@ def render_ai_companion_drawer(lang: str = "en"):
                 reply = agent.run_tracking_chat_agent(user_query, db_path=DB_PATH)
                 st.markdown(f"""
                     <div style="background: #FFFFFF; border: 2px solid #DFCAB0; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(36, 59, 99, 0.08); margin-top: 14px;">
-                        <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}</strong>
+                        <strong style="color: #D96C48; font-size: 0.82rem; text-transform: uppercase;">{t('assistant_reply_label', lang)}:</strong>
                         <div style="font-size: 0.95rem; color: #243B63; line-height: 1.5; margin-top: 6px;">
                             {reply.get('reply', '')}
                         </div>
