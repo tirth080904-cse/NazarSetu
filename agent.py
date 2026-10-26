@@ -259,6 +259,23 @@ def run_registration_agent_action(
     return reg_res, trail
 
 
+def run_complaint_registration_step(
+    confirmed_payload: Dict[str, Any],
+    trail: Optional[ActionTrail] = None,
+    db_path: Any = None
+) -> Dict[str, Any]:
+    """
+    Executes the persistent registration step (Stages 8-10) using confirmed citizen payload.
+    Returns the registration result dictionary containing status and complaint_id.
+    """
+    reg_res, _ = run_registration_agent_action(
+        confirmed_details=confirmed_payload,
+        trail=trail,
+        db_path=db_path
+    )
+    return reg_res
+
+
 def extract_tracking_id_from_text(text: str) -> Optional[str]:
     """Find pattern NS-DEMO-XXXXXXXX or CIV-DEMO-XXXX in user query."""
     match = re.search(r"\b(NS-DEMO-[A-Z0-9]{4,12}|CIV-DEMO-[A-Z0-9]{4,12})\b", text, re.IGNORECASE)

@@ -368,4 +368,45 @@ def test_all_streetverse_pages_harmonization():
             assert desc != "", f"Missing desc for {sec} in {lang}"
 
 
+# 11. Test Complaint Registration Step & Execution Log Stage Safety
+def test_complaint_registration_step_and_stages(temp_db):
+    trail = agent.ActionTrail()
+    payload = {
+        "confirmed": True,
+        "issue_type": "Potholes and damaged roads",
+        "description": "Severe crater on 100ft road.",
+        "city": "Bengaluru",
+        "locality": "Indiranagar",
+        "ward": "Ward 80 - Indiranagar",
+        "department": "Roads & Infrastructure Department",
+        "priority": "High",
+        "image_hash": "test_hash_reg_step",
+        "visual_evidence": "Deep crater observed",
+        "landmark": "Near Junction",
+    }
+    
+    # 1. Verify agent.run_complaint_registration_step exists and executes
+    reg_res = agent.run_complaint_registration_step(payload, trail=trail, db_path=temp_db)
+    assert reg_res["status"] == "registered"
+    assert "complaint_id" in reg_res
+    assert reg_res["complaint_id"].startswith("NS-DEMO-")
+
+    # 2. Verify ActionTrail recorded steps
+    steps = trail.get_steps()
+    assert len(steps) >= 3
+
+    # 3. Verify stage title and description resolution without list .get() error
+    for step in steps:
+        s_num = step.get("stage_number", 1)
+        t_name = step.get("tool_name", "tool")
+        stage_key = f"stage_{s_num}_name"
+        trans_name = t(stage_key, "en")
+        t_desc = trans_name if trans_name != stage_key else step.get("title", f"Stage {s_num}: {t_name}")
+        assert len(t_desc) > 3
+        # Verify input args resolution
+        t_args = step.get("input_arguments") or step.get("input_args") or {}
+        assert isinstance(t_args, dict)
+
+
+
 

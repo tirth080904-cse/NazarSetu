@@ -33,7 +33,6 @@ from config import (
     DB_PATH,
     OPENAI_API_KEY,
     OPENAI_MODEL,
-    COMPLAINT_STAGES,
     CATEGORY_METADATA,
 )
 import database
@@ -55,6 +54,20 @@ def render_html(html_str: str):
         st.html(cleaned_html)
     else:
         st.markdown(cleaned_html, unsafe_allow_html=True)
+
+
+def render_streetverse_image(image, caption=None):
+    """
+    Renders an image across any Streamlit version without the 'use_column_width' deprecation warning.
+    Uses width='stretch' for modern Streamlit (1.43+) and falls back gracefully on older releases.
+    """
+    try:
+        st.image(image, caption=caption, width="stretch")
+    except (TypeError, ValueError):
+        try:
+            st.image(image, caption=caption, use_container_width=True)
+        except (TypeError, ValueError):
+            st.image(image, caption=caption, use_column_width=True)
 
 
 HOTSPOT_METADATA = {
@@ -1597,7 +1610,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
     with col_preview:
         if uploaded_file:
             image_bytes = uploaded_file.getvalue()
-            st.image(image_bytes, caption="Uploaded Evidence", use_column_width=True)
+            render_streetverse_image(image_bytes, caption="Uploaded Evidence")
             render_html(f"""
                 <div class="polaroid-badge">
                     <span>EVIDENCE DOSSIER</span>
@@ -1609,7 +1622,7 @@ def render_ai_investigation_workspace(lang: str = "en"):
             if sample_file.exists():
                 with open(sample_file, "rb") as f:
                     image_bytes = f.read()
-                st.image(image_bytes, caption=f"Demo Incident: {st.session_state.selected_sample}", use_column_width=True)
+                render_streetverse_image(image_bytes, caption=f"Demo Incident: {st.session_state.selected_sample}")
                 render_html(f"""
                     <div class="polaroid-badge">
                         <span>ARCHIVED EVIDENCE</span>
@@ -1913,10 +1926,11 @@ def render_ai_mission_control_workshop(lang: str = "en"):
             s_num = step.get("stage_number", 1)
             t_name = step.get("tool_name", "agent_tool")
             t_time = step.get("timestamp", "")
-            t_args = step.get("input_arguments", {})
-            t_res = step.get("output_result", {})
-            raw_desc = COMPLAINT_STAGES.get(s_num, f"Stage {s_num}")
-            t_desc = t(raw_desc, lang)
+            t_args = step.get("input_arguments") or step.get("input_args") or {}
+            t_res = step.get("output_result") or {}
+            stage_key = f"stage_{s_num}_name"
+            trans_name = t(stage_key, lang)
+            t_desc = trans_name if trans_name != stage_key else step.get("title", f"Stage {s_num}: {t_name}")
 
             render_html(f"""
                 <div class="stage-card-workshop">
@@ -2130,7 +2144,7 @@ def render_civictwin_studio(lang: str = "en"):
     tw_col1, tw_col2 = st.columns(2)
     with tw_col1:
         if before_file.exists():
-            st.image(str(before_file), caption=t("before_photo_label", lang), use_column_width=True)
+            render_streetverse_image(str(before_file), caption=t("before_photo_label", lang))
         render_html(f"""
             <div class="polaroid-badge" style="color: #DC2626;">
                 <span>⚠️ {t('before_photo_label', lang)}</span>
@@ -2140,7 +2154,7 @@ def render_civictwin_studio(lang: str = "en"):
 
     with tw_col2:
         if after_file.exists():
-            st.image(str(after_file), caption=t("after_photo_label", lang), use_column_width=True)
+            render_streetverse_image(str(after_file), caption=t("after_photo_label", lang))
         render_html(f"""
             <div class="polaroid-badge" style="color: #059669;">
                 <span>✅ {t('after_photo_label', lang)}</span>
